@@ -1,6 +1,39 @@
 <script setup lang="ts">
+import faviconUrl from './assets/favicon/kp_favicon.ico'
+
+useHead({
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: faviconUrl },
+  ],
+})
+
+const homeImageModules = import.meta.glob('./assets/images/home/*', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>
+
+const homeImageGroups = Object.entries(homeImageModules)
+  .map(([path, url]) => ({
+    order: Number(path.match(/\/(\d+)_/)?.[1]),
+    path,
+    url,
+  }))
+  .filter(({ order }) => Number.isFinite(order))
+  .sort((first, second) => first.order - second.order || first.path.localeCompare(second.path))
+  .reduce<Array<{ order: number; images: string[] }>>((groups, image) => {
+    const currentGroup = groups.at(-1)
+    if (!currentGroup || currentGroup.order !== image.order) {
+      groups.push({ order: image.order, images: [image.url] })
+    } else {
+      currentGroup.images.push(image.url)
+    }
+    return groups
+  }, [])
+
 const isLibraryOpen = ref(false)
 const activeEpisode = ref(0)
+const activeHomeImageGroup = ref(0)
 const isTransitioning = ref(false)
 const transitionPhase = ref<'idle' | 'leaving' | 'entering'>('idle')
 const introComplete = ref(false)
@@ -13,6 +46,7 @@ const pointerPosition = ref({ x: 0, y: 0 })
 const trailPoints = ref(Array.from({ length: 6 }, () => ({ x: 0, y: 0 })))
 let cursorStopTimer: ReturnType<typeof setTimeout> | undefined
 let trailAnimationFrame: number | undefined
+let homeImageTimer: ReturnType<typeof setInterval> | undefined
 let hasPointerPosition = false
 
 const episodes = [
@@ -85,11 +119,17 @@ function animateTrail() {
 onMounted(() => {
   window.setTimeout(() => { introComplete.value = true }, 2250)
   trailAnimationFrame = window.requestAnimationFrame(animateTrail)
+  if (homeImageGroups.length > 1) {
+    homeImageTimer = window.setInterval(() => {
+      activeHomeImageGroup.value = (activeHomeImageGroup.value + 1) % homeImageGroups.length
+    }, 5000)
+  }
 })
 
 onBeforeUnmount(() => {
   if (cursorStopTimer) clearTimeout(cursorStopTimer)
   if (trailAnimationFrame) window.cancelAnimationFrame(trailAnimationFrame)
+  if (homeImageTimer) clearInterval(homeImageTimer)
 })
 </script>
 
@@ -115,6 +155,15 @@ onBeforeUnmount(() => {
         <div class="hero-meta"><span>2026</span><span>PORTFOLIO</span><span class="rating">5 EPS</span></div>
         <p class="hero-copy">Story of a boy who dreams to be in the world of tech and currently exploring. Get to know him one episode at a time.</p>
         <button class="play-button" @click="openLibrary"><b>▶</b> Play Now</button>
+      </div>
+      <div v-if="homeImageGroups.length" class="home-image-showcase" aria-label="Kurt Paguio through the years">
+        <div
+          v-for="(group, index) in homeImageGroups"
+          :key="group.order"
+          :class="['home-image-group', `home-image-group--${group.order}`, { 'home-image-group--active': activeHomeImageGroup === index }]"
+        >
+          <img v-for="image in group.images" :key="image" :src="image" alt="" />
+        </div>
       </div>
       <div class="droplet-field" aria-hidden="true"><span v-for="n in 8" :key="n"></span></div>
     </section>

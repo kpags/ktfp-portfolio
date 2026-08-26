@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   app: {
     head: {
-      title: 'DevFlix | Software Engineer Portfolio',
+      title: 'Kurt Paguio | Software Engineer',
       meta: [
         { name: 'description', content: 'A software engineer portfolio, told in episodes.' },
         { name: 'theme-color', content: '#090909' },

@@ -3,46 +3,46 @@ import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, createError, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, getQuery as getQuery$1, getRequestWebStream, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readBody, getResponseStatusText } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/h3/dist/index.mjs';
-import { escapeHtml } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/@vue/shared/dist/shared.cjs.js';
-import viteNodeEntry_mjs from 'file:///C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nuxt/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs';
-import { viteNodeFetch } from 'file:///C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nuxt/node_modules/@nuxt/vite-builder/dist/vite-node.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, encodePath, joinRelativeURL } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/ufo/dist/index.mjs';
-import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/unhead/dist/server.mjs';
-import { isVNode, isRef, toValue } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/vue/index.mjs';
-import { DeprecationsPlugin } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/unhead/dist/legacy.mjs';
-import { PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/unhead/dist/plugins.mjs';
-import { klona } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/defu/dist/defu.mjs';
-import destr, { destr as destr$1 } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/destr/dist/index.mjs';
-import { snakeCase } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/scule/dist/index.mjs';
-import { defineDiagnostics, createConsoleReporter } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nostics/dist/index.mjs';
-import { ansiFormatter } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nostics/dist/formatters/ansi.mjs';
-import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { renderToString } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/vue/server-renderer/index.mjs';
-import { stringify, uneval } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/devalue/index.js';
-import { createHooks } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1 } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/node-mock-http/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/unstorage/drivers/fs.mjs';
-import { digest, hash as hash$1 } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/ohash/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/radix3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, createError, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, getQuery as getQuery$1, getRequestWebStream, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, readBody, getResponseStatusText } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/h3/dist/index.mjs';
+import { escapeHtml } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/@vue/shared/dist/shared.cjs.js';
+import viteNodeEntry_mjs from 'file:///D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nuxt/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs';
+import { viteNodeFetch } from 'file:///D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nuxt/node_modules/@nuxt/vite-builder/dist/vite-node.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, encodePath, joinRelativeURL } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/ufo/dist/index.mjs';
+import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/unhead/dist/server.mjs';
+import { isVNode, isRef, toValue } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/vue/index.mjs';
+import { DeprecationsPlugin } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/unhead/dist/legacy.mjs';
+import { PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/unhead/dist/plugins.mjs';
+import { klona } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/defu/dist/defu.mjs';
+import destr, { destr as destr$1 } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/destr/dist/index.mjs';
+import { snakeCase } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/scule/dist/index.mjs';
+import { defineDiagnostics, createConsoleReporter } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nostics/dist/index.mjs';
+import { ansiFormatter } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nostics/dist/formatters/ansi.mjs';
+import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { renderToString } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/vue/server-renderer/index.mjs';
+import { stringify, uneval } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/devalue/index.js';
+import { createHooks } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/node-mock-http/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/unstorage/drivers/fs.mjs';
+import { digest, hash as hash$1 } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/ohash/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/radix3/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
-import consola, { consola as consola$1 } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/youch-core/build/index.js';
-import { Youch } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nitropack/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nitropack/node_modules/source-map/source-map.js';
+import consola, { consola as consola$1 } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/youch-core/build/index.js';
+import { Youch } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nitropack/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nitropack/node_modules/source-map/source-map.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { getContext } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nuxt/node_modules/unctx/dist/index.mjs';
-import { captureRawStackTrace, parseRawStackTrace } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/errx/dist/index.mjs';
-import _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/nuxt/node_modules/@nuxt/vite-builder/dist/fix-stacktrace.mjs';
+import { getContext } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nuxt/node_modules/unctx/dist/index.mjs';
+import { captureRawStackTrace, parseRawStackTrace } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/errx/dist/index.mjs';
+import _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/nuxt/node_modules/@nuxt/vite-builder/dist/fix-stacktrace.mjs';
 import { promises } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname as dirname$1, resolve as resolve$1 } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/pathe/dist/index.mjs';
-import { walkResolver } from 'file://C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/node_modules/unhead/dist/utils.mjs';
+import { dirname as dirname$1, resolve as resolve$1 } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/pathe/dist/index.mjs';
+import { walkResolver } from 'file://D:/DATA/Kurt/OneDrive%20-%20Dexterton%20Corporation/Desktop/Hobby%20Projects/ktfp-portfolio/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -54,11 +54,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets$1);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/server","watchOptions":{"ignored":[null]}}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio/server","watchOptions":{"ignored":[null]}}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio/.nuxt"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio/.nuxt/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -2022,7 +2022,7 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _FIpGaVT7Ny0u_PD0bhTY_x0SHvU_SxVrpQBdaFxUXG4 = (function(nitro) {
+const _g85SVSYZ_SMQUscIe0oSp_nl1CkvMfi4fbXSd58 = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
@@ -2075,7 +2075,7 @@ const serverDiagnostics = /* #__PURE__ */ defineDiagnostics({
 	}
 });
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"description","content":"A software engineer portfolio, told in episodes."},{"name":"theme-color","content":"#090909"}],"link":[],"style":[],"script":[],"noscript":[],"title":"DevFlix | Software Engineer Portfolio"};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"description","content":"A software engineer portfolio, told in episodes."},{"name":"theme-color","content":"#090909"}],"link":[],"style":[],"script":[],"noscript":[],"title":"Kurt Paguio | Software Engineer"};
 
 const appRootTag = "div";
 
@@ -2091,7 +2091,7 @@ const appSpaLoaderAttrs = {"id":"__nuxt-loader"};
 
 const appId = "nuxt-app";
 
-const rootDir = "C:/Users/kurtp/OneDrive/Desktop/Projects/ktfp-portfolio";
+const rootDir = "D:/DATA/Kurt/OneDrive - Dexterton Corporation/Desktop/Hobby Projects/ktfp-portfolio";
 
 //#region src/runtime/plugins/dev-server-logs.ts
 const devReducers = {
@@ -2168,7 +2168,7 @@ function onConsoleLog(callback) {
 }
 
 const plugins = [
-  _FIpGaVT7Ny0u_PD0bhTY_x0SHvU_SxVrpQBdaFxUXG4,
+  _g85SVSYZ_SMQUscIe0oSp_nl1CkvMfi4fbXSd58,
 dev_server_logs_default,
 _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 ];
@@ -2198,7 +2198,7 @@ function getAsset (id) {
 
 const METHODS = /* @__PURE__ */ new Set(["HEAD", "GET"]);
 const EncodingMap = { gzip: ".gz", br: ".br" };
-const _RTzoeV = eventHandler((event) => {
+const _xFhGLS = eventHandler((event) => {
   if (event.method && !METHODS.has(event.method)) {
     return;
   }
@@ -2773,13 +2773,13 @@ async function getIslandContext(event) {
 	};
 }
 
-const _lazy_bfq91h = () => Promise.resolve().then(function () { return renderer; });
+const _lazy_816NxM = () => Promise.resolve().then(function () { return renderer; });
 
 const handlers = [
-  { route: '', handler: _RTzoeV, lazy: false, middleware: true, method: undefined },
-  { route: '/__nuxt_error', handler: _lazy_bfq91h, lazy: true, middleware: false, method: undefined },
+  { route: '', handler: _xFhGLS, lazy: false, middleware: true, method: undefined },
+  { route: '/__nuxt_error', handler: _lazy_816NxM, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: handler$1, lazy: false, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_bfq91h, lazy: true, middleware: false, method: undefined }
+  { route: '/**', handler: _lazy_816NxM, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
