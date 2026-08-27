@@ -31,6 +31,20 @@ const homeImageGroups = Object.entries(homeImageModules)
     return groups
   }, [])
 
+const episodeThumbnailModules = import.meta.glob('./assets/episode_thumbnails/**/*.{mp4,webm}', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>
+
+const episodeFolderNames = ['one', 'two', 'three', 'four', 'five']
+const episodeClipSequences = episodeFolderNames.map(folder =>
+  Object.entries(episodeThumbnailModules)
+    .filter(([path]) => path.includes(`/episode_${folder}/`))
+    .sort(([firstPath], [secondPath]) => firstPath.localeCompare(secondPath))
+    .map(([, url]) => url),
+)
+
 const isLibraryOpen = ref(false)
 const activeEpisode = ref(0)
 const activeHomeImageGroup = ref(0)
@@ -44,17 +58,22 @@ const cursorIsMoving = ref(false)
 const cursorIsVisible = ref(false)
 const pointerPosition = ref({ x: 0, y: 0 })
 const trailPoints = ref(Array.from({ length: 6 }, () => ({ x: 0, y: 0 })))
+const episodePreviewIndexes = ref(episodeFolderNames.map(() => 0))
+const episodePreviewFading = ref(episodeFolderNames.map(() => false))
+const previewingEpisode = ref<number | null>(null)
+const episodeVideoRefs: Array<HTMLVideoElement | null> = []
 let cursorStopTimer: ReturnType<typeof setTimeout> | undefined
 let trailAnimationFrame: number | undefined
 let homeImageTimer: ReturnType<typeof setInterval> | undefined
+const episodePreviewTransitionTimers: Array<ReturnType<typeof setTimeout> | undefined> = []
 let hasPointerPosition = false
 
 const episodes = [
-  { number: '01', title: 'About Me', label: 'Who am I & hobbies', className: 'about' },
-  { number: '02', title: 'Education', label: 'The learning arc', className: 'education' },
-  { number: '03', title: 'Skills', label: 'Tech & soft skills', className: 'skills' },
-  { number: '04', title: 'Work Experience', label: 'Career highlights', className: 'work' },
-  { number: '05', title: 'Contact', label: 'Details & resume', className: 'contact' },
+  { number: '01', title: 'About Me', label: 'Who am I & hobbies', className: 'about', clips: episodeClipSequences[0] },
+  { number: '02', title: 'Education', label: 'The learning arc', className: 'education', clips: episodeClipSequences[1] },
+  { number: '03', title: 'Skills', label: 'Tech & soft skills', className: 'skills', clips: episodeClipSequences[2] },
+  { number: '04', title: 'Work Experience', label: 'Career highlights', className: 'work', clips: episodeClipSequences[3] },
+  { number: '05', title: 'Contact', label: 'Details & resume', className: 'contact', clips: episodeClipSequences[4] },
 ]
 
 function beginTransition(event: MouseEvent, action: () => void) {
@@ -82,6 +101,63 @@ function openLibrary(event: MouseEvent) {
 
 function selectEpisode(event: MouseEvent, index: number) {
   beginTransition(event, () => { activeEpisode.value = index })
+}
+
+function setEpisodeVideo(index: number, element: Element | null) {
+  episodeVideoRefs[index] = element instanceof HTMLVideoElement ? element : null
+}
+
+function startEpisodePreview(index: number) {
+  if (!episodes[index].clips.length) return
+  previewingEpisode.value = index
+  episodePreviewIndexes.value[index] = 0
+  nextTick(() => {
+    const video = episodeVideoRefs[index]
+    if (!video) return
+    video.currentTime = 0
+    video.play().catch(() => undefined)
+  })
+}
+
+function playNextPreviewClip(index: number) {
+  const clips = episodes[index].clips
+  if (!clips.length || previewingEpisode.value !== index) return
+  episodeVideoRefs[index]?.pause()
+  episodePreviewFading.value[index] = true
+  episodePreviewTransitionTimers[index] = window.setTimeout(() => {
+    if (previewingEpisode.value !== index) return
+    episodePreviewIndexes.value[index] = (episodePreviewIndexes.value[index] + 1) % clips.length
+    nextTick(() => {
+      const nextVideo = episodeVideoRefs[index]
+      if (!nextVideo) return
+      nextVideo.load()
+      episodePreviewFading.value[index] = false
+      nextVideo.play().catch(() => undefined)
+    })
+  }, 180)
+}
+
+function resetEpisodePreview(index: number) {
+  if (!episodes[index].clips.length) return
+  if (episodePreviewTransitionTimers[index]) clearTimeout(episodePreviewTransitionTimers[index])
+  previewingEpisode.value = null
+  episodePreviewFading.value[index] = false
+  const video = episodeVideoRefs[index]
+  if (video) video.pause()
+  episodePreviewIndexes.value[index] = 0
+  nextTick(() => {
+    const thumbnailVideo = episodeVideoRefs[index]
+    if (!thumbnailVideo) return
+    thumbnailVideo.load()
+  })
+}
+
+function setThumbnailFrame(index: number) {
+  if (previewingEpisode.value === index) return
+  const video = episodeVideoRefs[index]
+  if (!video) return
+  video.pause()
+  video.currentTime = .05
 }
 
 function closeLibrary(event: MouseEvent) {
@@ -130,6 +206,7 @@ onBeforeUnmount(() => {
   if (cursorStopTimer) clearTimeout(cursorStopTimer)
   if (trailAnimationFrame) window.cancelAnimationFrame(trailAnimationFrame)
   if (homeImageTimer) clearInterval(homeImageTimer)
+  episodePreviewTransitionTimers.forEach(timer => { if (timer) clearTimeout(timer) })
 })
 </script>
 
@@ -188,7 +265,21 @@ onBeforeUnmount(() => {
           role="listitem"
           :aria-pressed="activeEpisode === index"
           @click="selectEpisode($event, index)"
+          @mouseenter="startEpisodePreview(index)"
+          @mouseleave="resetEpisodePreview(index)"
         >
+          <video
+            v-if="episode.clips.length"
+            :ref="element => setEpisodeVideo(index, element)"
+            :class="['episode-preview', { 'episode-preview--fading': episodePreviewFading[index] }]"
+            :src="episode.clips[episodePreviewIndexes[index]]"
+            muted
+            playsinline
+            preload="metadata"
+            aria-hidden="true"
+            @ended="playNextPreviewClip(index)"
+            @loadeddata="setThumbnailFrame(index)"
+          ></video>
           <span class="episode-index">EP. {{ episode.number }}</span>
           <span class="episode-title">{{ episode.title }}</span>
           <span class="episode-subtitle">{{ episode.label }}</span>

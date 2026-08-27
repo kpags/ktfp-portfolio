@@ -1086,6 +1086,12 @@ var _4_thumbnail_work_default = "" + __buildAssetsURL("4_thumbnail_work.DNpvCATb
 //#region assets/images/home/4_thumbnail_workmates.png?url
 var _4_thumbnail_workmates_default = "" + __buildAssetsURL("4_thumbnail_workmates.DHQkUie_.png");
 //#endregion
+//#region assets/episode_thumbnails/episode_one/badminton.mp4?url
+var badminton_default = "" + __buildAssetsURL("badminton.Ca11r6KD.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_one/programming.mp4?url
+var programming_default = "" + __buildAssetsURL("programming.CaDBM7O7.mp4");
+//#endregion
 //#region assets/favicon/kp_favicon.ico
 var kp_favicon_default = "" + __buildAssetsURL("kp_favicon.B8zIlRr6.ico");
 //#endregion
@@ -1120,6 +1126,18 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			else currentGroup.images.push(image.url);
 			return groups;
 		}, []);
+		const episodeThumbnailModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_thumbnails/episode_one/badminton.mp4": badminton_default,
+			"./assets/episode_thumbnails/episode_one/programming.mp4": programming_default
+		});
+		const episodeFolderNames = [
+			"one",
+			"two",
+			"three",
+			"four",
+			"five"
+		];
+		const episodeClipSequences = episodeFolderNames.map((folder) => Object.entries(episodeThumbnailModules).filter(([path]) => path.includes(`/episode_${folder}/`)).sort(([firstPath], [secondPath]) => firstPath.localeCompare(secondPath)).map(([, url]) => url));
 		const isLibraryOpen = ref(false);
 		const activeEpisode = ref(0);
 		const activeHomeImageGroup = ref(0);
@@ -1139,36 +1157,44 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			x: 0,
 			y: 0
 		})));
+		const episodePreviewIndexes = ref(episodeFolderNames.map(() => 0));
+		const episodePreviewFading = ref(episodeFolderNames.map(() => false));
+		ref(null);
 		const episodes = [
 			{
 				number: "01",
 				title: "About Me",
 				label: "Who am I & hobbies",
-				className: "about"
+				className: "about",
+				clips: episodeClipSequences[0]
 			},
 			{
 				number: "02",
 				title: "Education",
 				label: "The learning arc",
-				className: "education"
+				className: "education",
+				clips: episodeClipSequences[1]
 			},
 			{
 				number: "03",
 				title: "Skills",
 				label: "Tech & soft skills",
-				className: "skills"
+				className: "skills",
+				clips: episodeClipSequences[2]
 			},
 			{
 				number: "04",
 				title: "Work Experience",
 				label: "Career highlights",
-				className: "work"
+				className: "work",
+				clips: episodeClipSequences[3]
 			},
 			{
 				number: "05",
 				title: "Contact",
 				label: "Details & resume",
-				className: "contact"
+				className: "contact",
+				clips: episodeClipSequences[4]
 			}
 		];
 		return (_ctx, _push, _parent, _attrs) => {
@@ -1230,7 +1256,10 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 						"episode-card",
 						`episode-card--${episode.className}`,
 						{ "episode-card--active": unref(activeEpisode) === index }
-					])}" role="listitem"${ssrRenderAttr("aria-pressed", unref(activeEpisode) === index)}><span class="episode-index">EP. ${ssrInterpolate(episode.number)}</span><span class="episode-title">${ssrInterpolate(episode.title)}</span><span class="episode-subtitle">${ssrInterpolate(episode.label)}</span><span class="watch-icon">↗</span></button>`);
+					])}" role="listitem"${ssrRenderAttr("aria-pressed", unref(activeEpisode) === index)}>`);
+					if (episode.clips.length) _push(`<video class="${ssrRenderClass(["episode-preview", { "episode-preview--fading": unref(episodePreviewFading)[index] }])}"${ssrRenderAttr("src", episode.clips[unref(episodePreviewIndexes)[index]])} muted playsinline preload="metadata" aria-hidden="true"></video>`);
+					else _push(`<!---->`);
+					_push(`<span class="episode-index">EP. ${ssrInterpolate(episode.number)}</span><span class="episode-title">${ssrInterpolate(episode.title)}</span><span class="episode-subtitle">${ssrInterpolate(episode.label)}</span><span class="watch-icon">↗</span></button>`);
 				});
 				_push(`<!--]--></div><div class="episode-detail"><span class="detail-pulse"></span><p>SELECTED EPISODE</p><strong>EP. ${ssrInterpolate(episodes[unref(activeEpisode)].number)} — ${ssrInterpolate(episodes[unref(activeEpisode)].title)}</strong><span>Content placeholder · Coming soon</span></div></section>`);
 			} else _push(`<!---->`);
