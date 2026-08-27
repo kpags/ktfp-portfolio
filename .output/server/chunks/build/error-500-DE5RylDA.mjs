@@ -1,4 +1,4 @@
-import { u as useHead$1 } from '../virtual/entry.mjs';
+globalThis.__timing__.logStart('Load chunks/build/error-500-DE5RylDA');import { u as useHead$1 } from '../virtual/entry.mjs';
 import { _ as _plugin_vue_export_helper_default } from './_plugin-vue_export-helper-BOaGB7Aw.mjs';
 import { useSSRContext, mergeProps } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate } from 'vue/server-renderer';
@@ -67,5 +67,5 @@ _sfc_main.setup = (props, ctx) => {
 };
 var error_500_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["__scopeId", "data-v-6e93dc00"]]);
 
-export { error_500_default as default };
+export { error_500_default as default };;globalThis.__timing__.logEnd('Load chunks/build/error-500-DE5RylDA');
 //# sourceMappingURL=error-500-DE5RylDA.mjs.map

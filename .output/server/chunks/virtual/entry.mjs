@@ -1,8 +1,8 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { defineProdDiagnostics } from 'nostics';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};globalThis.__timing__.logStart('Load chunks/virtual/entry');import { defineProdDiagnostics } from 'nostics';
 import { ansiFormatter } from 'nostics/formatters/ansi';
 import { getCurrentScope, ref, watchEffect, getCurrentInstance, onBeforeUnmount, onDeactivated, onActivated, createApp, provide, onErrorCaptured, onServerPrefetch, unref, createVNode, resolveDynamicComponent, shallowReactive, reactive, effectScope, hasInjectionContext, inject, defineAsyncComponent, mergeProps, defineComponent, toRef, computed, h, isReadonly, useSSRContext, isRef, isShallow, isReactive, toRaw } from 'vue';
 import { f as createError, $ as $fetch, m as isEqual, n as stringifyParsedURL, o as stringifyQuery, p as parseQuery, q as hasProtocol, i as joinURL, v as defu, w as withQuery, x as sanitizeStatusCode, y as parseURL, e as encodePath, z as decodePath, A as isScriptProtocol } from '../_/nitro.mjs';
-import { i as injectHead$1, V as VueResolver, b as baseURL, h as headSymbol } from '../routes/renderer.mjs';
+import { i as injectHead$1, V as VueResolver, h as headSymbol, b as baseURL } from '../routes/renderer.mjs';
 import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrRenderList, ssrRenderStyle, ssrRenderClass, ssrRenderAttr, ssrInterpolate } from 'vue/server-renderer';
 import { walkResolver } from 'unhead/utils';
 
@@ -217,6 +217,38 @@ var Hookable = class {
 };
 function createHooks() {
 	return new Hookable();
+}
+const isBrowser = "undefined" !== "undefined";
+function createDebugger(hooks, _options = {}) {
+	const options = {
+		inspect: isBrowser,
+		group: isBrowser,
+		filter: () => true,
+		..._options
+	};
+	const _filter = options.filter;
+	const filter = typeof _filter === "string" ? (name) => name.startsWith(_filter) : _filter;
+	const _tag = options.tag ? `[${options.tag}] ` : "";
+	const logPrefix = (event) => _tag + event.name + "".padEnd(event._id, "\0");
+	const _idCtr = {};
+	const unsubscribeBefore = hooks.beforeEach((event) => {
+		if (filter !== void 0 && !filter(event.name)) return;
+		_idCtr[event.name] = _idCtr[event.name] || 0;
+		event._id = _idCtr[event.name]++;
+		console.time(logPrefix(event));
+	});
+	const unsubscribeAfter = hooks.afterEach((event) => {
+		if (filter !== void 0 && !filter(event.name)) return;
+		if (options.group) console.groupCollapsed(event.name);
+		if (options.inspect) console.timeLog(logPrefix(event), event.args);
+		else console.timeEnd(logPrefix(event));
+		if (options.group) console.groupEnd();
+		_idCtr[event.name]--;
+	});
+	return { close: () => {
+		unsubscribeBefore();
+		unsubscribeAfter();
+	} };
 }
 
 function _getAsyncLocalStorage() {
@@ -716,7 +748,7 @@ function freezeHead(head) {
 }
 //#endregion
 //#region node_modules/nuxt/dist/head/runtime/plugins/unhead.server.js
-var plugin$2 = /* @__PURE__ */ defineNuxtPlugin({
+var plugin$3 = /* @__PURE__ */ defineNuxtPlugin({
 	name: "nuxt:head",
 	enforce: "pre",
 	setup(nuxtApp) {
@@ -804,7 +836,7 @@ function getRouteFromPath(fullPath) {
 		href: fullPath
 	};
 }
-var plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
+var plugin$2 = /* @__PURE__ */ defineNuxtPlugin({
 	name: "nuxt:router",
 	enforce: "pre",
 	setup(nuxtApp) {
@@ -958,6 +990,15 @@ var plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
 	}
 });
 //#endregion
+//#region node_modules/nuxt/dist/app/plugins/debug-hooks.js
+var plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
+	name: "nuxt:debug:hooks",
+	enforce: "pre",
+	setup(nuxtApp) {
+		createDebugger(nuxtApp.hooks, { tag: "nuxt-app" });
+	}
+});
+//#endregion
 //#region node_modules/nuxt/dist/app/diagnostics/head.js
 /**
 * E6xxx
@@ -1012,6 +1053,7 @@ var reducers = [
 //#endregion
 //#region virtual:nuxt:node_modules%2F.cache%2Fnuxt%2F.nuxt%2Fplugins.server.mjs
 var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fplugins_server_default = [
+	plugin$3,
 	plugin$2,
 	plugin$1,
 	/* @__PURE__ */ defineNuxtPlugin({
@@ -1023,13 +1065,64 @@ var virtual_nuxt_node_modules_2F_cache_2Fnuxt_2F_nuxt_2Fplugins_server_default =
 	/* @__PURE__ */ defineNuxtPlugin({ name: "nuxt:global-components" })
 ];
 //#endregion
+//#region assets/images/home/1_thumbnail_baby.png?url
+var _1_thumbnail_baby_default = "" + __buildAssetsURL("1_thumbnail_baby.DdqAObs2.png");
+//#endregion
+//#region assets/images/home/2_thumbnail_athlete_podium.png?url
+var _2_thumbnail_athlete_podium_default = "" + __buildAssetsURL("2_thumbnail_athlete_podium.2BljEzFf.png");
+//#endregion
+//#region assets/images/home/2_thumbnail_athlete_training.png?url
+var _2_thumbnail_athlete_training_default = "" + __buildAssetsURL("2_thumbnail_athlete_training.BzdmcRtW.png");
+//#endregion
+//#region assets/images/home/3_thumbnail_college.png?url
+var _3_thumbnail_college_default = "" + __buildAssetsURL("3_thumbnail_college.BPS8zoB8.png");
+//#endregion
+//#region assets/images/home/3_thumbnail_college_graduate.png?url
+var _3_thumbnail_college_graduate_default = "" + __buildAssetsURL("3_thumbnail_college_graduate.CXRP-ZJv.png");
+//#endregion
+//#region assets/images/home/4_thumbnail_work.png?url
+var _4_thumbnail_work_default = "" + __buildAssetsURL("4_thumbnail_work.DNpvCATb.png");
+//#endregion
+//#region assets/images/home/4_thumbnail_workmates.png?url
+var _4_thumbnail_workmates_default = "" + __buildAssetsURL("4_thumbnail_workmates.DHQkUie_.png");
+//#endregion
+//#region assets/favicon/kp_favicon.ico
+var kp_favicon_default = "" + __buildAssetsURL("kp_favicon.B8zIlRr6.ico");
+//#endregion
 //#region app.vue?vue&type=script&setup=true&lang.ts
 var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
 	__name: "app",
 	__ssrInlineRender: true,
 	setup(__props) {
+		useHead$1({ link: [{
+			rel: "icon",
+			type: "image/x-icon",
+			href: kp_favicon_default
+		}] });
+		const homeImageGroups = Object.entries(/* @__PURE__ */ Object.assign({
+			"./assets/images/home/1_thumbnail_baby.png": _1_thumbnail_baby_default,
+			"./assets/images/home/2_thumbnail_athlete_podium.png": _2_thumbnail_athlete_podium_default,
+			"./assets/images/home/2_thumbnail_athlete_training.png": _2_thumbnail_athlete_training_default,
+			"./assets/images/home/3_thumbnail_college.png": _3_thumbnail_college_default,
+			"./assets/images/home/3_thumbnail_college_graduate.png": _3_thumbnail_college_graduate_default,
+			"./assets/images/home/4_thumbnail_work.png": _4_thumbnail_work_default,
+			"./assets/images/home/4_thumbnail_workmates.png": _4_thumbnail_workmates_default
+		})).map(([path, url]) => ({
+			order: Number(path.match(/\/(\d+)_/)?.[1]),
+			path,
+			url
+		})).filter(({ order }) => Number.isFinite(order)).sort((first, second) => first.order - second.order || first.path.localeCompare(second.path)).reduce((groups, image) => {
+			const currentGroup = groups.at(-1);
+			if (!currentGroup || currentGroup.order !== image.order) groups.push({
+				order: image.order,
+				images: [image.url]
+			});
+			else currentGroup.images.push(image.url);
+			return groups;
+		}, []);
 		const isLibraryOpen = ref(false);
 		const activeEpisode = ref(0);
+		const activeHomeImageGroup = ref(0);
 		const isTransitioning = ref(false);
 		const transitionPhase = ref("idle");
 		const introComplete = ref(false);
@@ -1105,7 +1198,23 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			if (unref(isTransitioning)) _push(`<div class="portal" style="${ssrRenderStyle(unref(portalStyle))}" aria-hidden="true"><span></span><span></span></div>`);
 			else _push(`<!---->`);
 			if (!unref(isLibraryOpen)) {
-				_push(`<section class="${ssrRenderClass(["hero", { "hero--leaving": unref(transitionPhase) === "leaving" }])}" aria-labelledby="hero-title"><nav class="nav"><button class="brand" aria-label="Kurt Paguio home">KURT<span>PAGUIO</span></button><button class="menu-button" aria-label="Open episode selector"><i></i><i></i></button></nav><div class="hero-content"><p class="eyebrow">GET TO KNOW AN AMAZING SOFTWARE ENGINEER</p><h1 id="hero-title">HI!<br><em>I AM KURT.</em></h1><div class="hero-meta"><span>2026</span><span>PORTFOLIO</span><span class="rating">5 EPS</span></div><p class="hero-copy">Story of a boy who dreams to be in the world of tech and currently exploring. Get to know him one episode at a time.</p><button class="play-button"><b>▶</b> Play Now</button></div><div class="droplet-field" aria-hidden="true"><!--[-->`);
+				_push(`<section class="${ssrRenderClass(["hero", { "hero--leaving": unref(transitionPhase) === "leaving" }])}" aria-labelledby="hero-title"><nav class="nav"><button class="brand" aria-label="Kurt Paguio home">KURT<span>PAGUIO</span></button><button class="menu-button" aria-label="Open episode selector"><i></i><i></i></button></nav><div class="hero-content"><p class="eyebrow">GET TO KNOW AN AMAZING SOFTWARE ENGINEER</p><h1 id="hero-title">HI!<br><em>I AM KURT.</em></h1><div class="hero-meta"><span>2026</span><span>PORTFOLIO</span><span class="rating">5 EPS</span></div><p class="hero-copy">Story of a boy who dreams to be in the world of tech and currently exploring. Get to know him one episode at a time.</p><button class="play-button"><b>▶</b> Play Now</button></div>`);
+				if (unref(homeImageGroups).length) {
+					_push(`<div class="home-image-showcase" aria-label="Kurt Paguio through the years"><!--[-->`);
+					ssrRenderList(unref(homeImageGroups), (group, index) => {
+						_push(`<div class="${ssrRenderClass([
+							"home-image-group",
+							`home-image-group--${group.order}`,
+							{ "home-image-group--active": unref(activeHomeImageGroup) === index }
+						])}"><!--[-->`);
+						ssrRenderList(group.images, (image) => {
+							_push(`<img${ssrRenderAttr("src", image)} alt="">`);
+						});
+						_push(`<!--]--></div>`);
+					});
+					_push(`<!--]--></div>`);
+				} else _push(`<!---->`);
+				_push(`<div class="droplet-field" aria-hidden="true"><!--[-->`);
 				ssrRenderList(8, (n) => {
 					_push(`<span></span>`);
 				});
@@ -1252,5 +1361,5 @@ const entry = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: entry_default
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { useRouter as a, useRuntimeConfig as b, useNuxtApp as c, nuxtLinkDefaults as d, encodeRoutePath as e, entry as f, navigateTo as n, resolveRouteObject as r, useHead$1 as u };
+export { useRouter as a, useRuntimeConfig as b, useNuxtApp as c, nuxtLinkDefaults as d, encodeRoutePath as e, entry as f, navigateTo as n, resolveRouteObject as r, useHead$1 as u };;globalThis.__timing__.logEnd('Load chunks/virtual/entry');
 //# sourceMappingURL=entry.mjs.map

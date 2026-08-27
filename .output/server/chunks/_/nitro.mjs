@@ -1,4 +1,4 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import http from 'node:http';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};globalThis.__timing__.logStart('Load chunks/_/nitro');import http from 'node:http';
 import https from 'node:https';
 import { EventEmitter } from 'node:events';
 import { Buffer as Buffer$1 } from 'node:buffer';
@@ -2177,6 +2177,53 @@ function createHooks() {
   return new Hookable();
 }
 
+const isBrowser = "undefined" !== "undefined";
+function createDebugger(hooks, _options = {}) {
+  const options = {
+    inspect: isBrowser,
+    group: isBrowser,
+    filter: () => true,
+    ..._options
+  };
+  const _filter = options.filter;
+  const filter = typeof _filter === "string" ? (name) => name.startsWith(_filter) : _filter;
+  const _tag = options.tag ? `[${options.tag}] ` : "";
+  const logPrefix = (event) => _tag + event.name + "".padEnd(event._id, "\0");
+  const _idCtr = {};
+  const unsubscribeBefore = hooks.beforeEach((event) => {
+    if (filter !== void 0 && !filter(event.name)) {
+      return;
+    }
+    _idCtr[event.name] = _idCtr[event.name] || 0;
+    event._id = _idCtr[event.name]++;
+    console.time(logPrefix(event));
+  });
+  const unsubscribeAfter = hooks.afterEach((event) => {
+    if (filter !== void 0 && !filter(event.name)) {
+      return;
+    }
+    if (options.group) {
+      console.groupCollapsed(event.name);
+    }
+    if (options.inspect) {
+      console.timeLog(logPrefix(event), event.args);
+    } else {
+      console.timeEnd(logPrefix(event));
+    }
+    if (options.group) {
+      console.groupEnd();
+    }
+    _idCtr[event.name]--;
+  });
+  return {
+    /** Stop debugging and remove listeners */
+    close: () => {
+      unsubscribeBefore();
+      unsubscribeAfter();
+    }
+  };
+}
+
 const s=globalThis.Headers,i=globalThis.AbortController,l=globalThis.fetch||(()=>{throw new Error("[node-fetch-native] Failed to fetch: `globalThis.fetch` is not available!")});
 
 class FetchError extends Error {
@@ -4042,7 +4089,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "e166c06a-e998-47bd-b2bc-b1cbc27690d4",
+    "buildId": "ee17b61a-5a5d-4ebf-85ee-f4a2a9e4c011",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4378,11 +4425,55 @@ async function errorHandler(error, event) {
   // H3 will handle fallback
 }
 
+function defineNitroPlugin(def) {
+  return def;
+}
+
+const _Mo9DBf1lByMbxowDmkfLwqd4g9x4ihxG9aDJodq1YQY = defineNitroPlugin((nitro) => {
+  createDebugger(nitro.hooks, { tag: "nitro-runtime" });
+});
+
+const globalTiming = globalThis.__timing__ || {
+  start: () => 0,
+  end: () => 0,
+  metrics: []
+};
+const timingMiddleware = eventHandler((event) => {
+  const start = globalTiming.start();
+  const _end = event.node.res.end;
+  event.node.res.end = function(chunk, encoding, cb) {
+    const metrics = [
+      ["Generate", globalTiming.end(start)],
+      ...globalTiming.metrics
+    ];
+    const serverTiming = metrics.map((m) => `-;dur=${m[1]};desc="${encodeURIComponent(m[0])}"`).join(", ");
+    if (!event.node.res.headersSent) {
+      event.node.res.setHeader("Server-Timing", serverTiming);
+    }
+    _end.call(event.node.res, chunk, encoding, cb);
+    return this;
+  }.bind(event.node.res);
+});
+const _0iFuVVEkD1tHrw6BzQzOknMCy2YtI59yYGBHAgKlm8 = defineNitroPlugin((nitro) => {
+  nitro.h3App.stack.unshift({
+    route: "/",
+    handler: timingMiddleware
+  });
+});
+
 const plugins = [
-  
+  _Mo9DBf1lByMbxowDmkfLwqd4g9x4ihxG9aDJodq1YQY,
+_0iFuVVEkD1tHrw6BzQzOknMCy2YtI59yYGBHAgKlm8
 ];
 
 const assets = {
+  "/_nuxt/1_thumbnail_baby.DdqAObs2.png": {
+    "type": "image/png",
+    "etag": "\"3d6da-f7SXrvxOVwTzygDrYhovpgbVsMo\"",
+    "mtime": "2026-08-27T11:37:37.515Z",
+    "size": 251610,
+    "path": "../public/_nuxt/1_thumbnail_baby.DdqAObs2.png"
+  },
   "/favicon.svg": {
     "type": "image/svg+xml",
     "etag": "\"2c8-geBxqJCnEMLdObLLD/aK9EAfyXI\"",
@@ -4390,75 +4481,117 @@ const assets = {
     "size": 712,
     "path": "../public/favicon.svg"
   },
-  "/_nuxt/CkJz3ZKq.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"39a-pobE1c4oYkCOokiWViYr/pwPraI\"",
-    "mtime": "2026-08-25T13:33:19.374Z",
-    "size": 922,
-    "path": "../public/_nuxt/CkJz3ZKq.js"
+  "/_nuxt/2_thumbnail_athlete_podium.2BljEzFf.png": {
+    "type": "image/png",
+    "etag": "\"28409-PSsc5bli38/SUkpMGdXwVYHmHrE\"",
+    "mtime": "2026-08-27T11:37:37.516Z",
+    "size": 164873,
+    "path": "../public/_nuxt/2_thumbnail_athlete_podium.2BljEzFf.png"
   },
-  "/_nuxt/D7sNh6PR.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"d39-9+qj49934jWlgOSEgU+0MkgbckU\"",
-    "mtime": "2026-08-25T13:33:19.374Z",
-    "size": 3385,
-    "path": "../public/_nuxt/D7sNh6PR.js"
+  "/_nuxt/3_thumbnail_college_graduate.CXRP-ZJv.png": {
+    "type": "image/png",
+    "etag": "\"3f9ca-EVxBP+oDCjvlgSe42ZQ9CAlTw+s\"",
+    "mtime": "2026-08-27T11:37:37.517Z",
+    "size": 260554,
+    "path": "../public/_nuxt/3_thumbnail_college_graduate.CXRP-ZJv.png"
   },
-  "/_nuxt/entry.BhcFaZML.css": {
+  "/_nuxt/3_thumbnail_college.BPS8zoB8.png": {
+    "type": "image/png",
+    "etag": "\"32765-XPYVgwPGr9oPV7xewi223X6QVrw\"",
+    "mtime": "2026-08-27T11:37:37.517Z",
+    "size": 206693,
+    "path": "../public/_nuxt/3_thumbnail_college.BPS8zoB8.png"
+  },
+  "/_nuxt/2_thumbnail_athlete_training.BzdmcRtW.png": {
+    "type": "image/png",
+    "etag": "\"26bf3-cVMPbZsrbuGEP0gSTb3g9Nd8jHo\"",
+    "mtime": "2026-08-27T11:37:37.516Z",
+    "size": 158707,
+    "path": "../public/_nuxt/2_thumbnail_athlete_training.BzdmcRtW.png"
+  },
+  "/_nuxt/4_thumbnail_workmates.DHQkUie_.png": {
+    "type": "image/png",
+    "etag": "\"4214d-b9Zqi3jSBn6eHSH/Huk7SdJWTP8\"",
+    "mtime": "2026-08-27T11:37:37.518Z",
+    "size": 270669,
+    "path": "../public/_nuxt/4_thumbnail_workmates.DHQkUie_.png"
+  },
+  "/_nuxt/4_thumbnail_work.DNpvCATb.png": {
+    "type": "image/png",
+    "etag": "\"2f7d1-zY93lAdRxM5aQF16JtOpDWMJs8g\"",
+    "mtime": "2026-08-27T11:37:37.518Z",
+    "size": 194513,
+    "path": "../public/_nuxt/4_thumbnail_work.DNpvCATb.png"
+  },
+  "/_nuxt/BDNMzG2s.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"54-MasMfSk/A98C3Gn9uIOxtFxkWNw\"",
+    "mtime": "2026-08-27T11:37:37.513Z",
+    "size": 84,
+    "path": "../public/_nuxt/BDNMzG2s.js"
+  },
+  "/_nuxt/entry.Df_UREtR.css": {
     "type": "text/css; charset=utf-8",
-    "etag": "\"25f8-sdKzSIZJaNvZkqdmAMWMekEJqDY\"",
-    "mtime": "2026-08-25T13:33:19.374Z",
-    "size": 9720,
-    "path": "../public/_nuxt/entry.BhcFaZML.css"
+    "etag": "\"2b2a-DPbnwk3+W0tE2vkRhN7vjU5JXao\"",
+    "mtime": "2026-08-27T11:37:37.519Z",
+    "size": 11050,
+    "path": "../public/_nuxt/entry.Df_UREtR.css"
   },
   "/_nuxt/error-404.C3wqHTJz.css": {
     "type": "text/css; charset=utf-8",
     "etag": "\"97d-bnuHySqHNw6hr3RxjvX1i4ng3W0\"",
-    "mtime": "2026-08-25T13:33:19.374Z",
+    "mtime": "2026-08-27T11:37:37.519Z",
     "size": 2429,
     "path": "../public/_nuxt/error-404.C3wqHTJz.css"
   },
   "/_nuxt/error-500.D6rBzoDj.css": {
     "type": "text/css; charset=utf-8",
     "etag": "\"772-1gy21mJcEtmrpKn02mQKUYB/dbo\"",
-    "mtime": "2026-08-25T13:33:19.376Z",
+    "mtime": "2026-08-27T11:37:37.519Z",
     "size": 1906,
     "path": "../public/_nuxt/error-500.D6rBzoDj.css"
   },
+  "/_nuxt/kp_favicon.B8zIlRr6.ico": {
+    "type": "image/vnd.microsoft.icon",
+    "etag": "\"3c25-PXt1vNi6MMjZ7jne43hlq7xbegM\"",
+    "mtime": "2026-08-27T11:37:37.519Z",
+    "size": 15397,
+    "path": "../public/_nuxt/kp_favicon.B8zIlRr6.ico"
+  },
   "/_nuxt/builds/latest.json": {
     "type": "application/json",
-    "etag": "\"47-DcFP/UhIXQfU2rGsrC+AqGGS4tM\"",
-    "mtime": "2026-08-25T13:33:19.714Z",
+    "etag": "\"47-E6HfRzyJhGmoZaov2/xz3NKW2wY\"",
+    "mtime": "2026-08-27T11:37:37.803Z",
     "size": 71,
     "path": "../public/_nuxt/builds/latest.json"
   },
-  "/_nuxt/builds/meta/e166c06a-e998-47bd-b2bc-b1cbc27690d4.json": {
+  "/_nuxt/builds/meta/ee17b61a-5a5d-4ebf-85ee-f4a2a9e4c011.json": {
     "type": "application/json",
-    "etag": "\"58-HX77wu4ycieuBA48h0xjS15q6Es\"",
-    "mtime": "2026-08-25T13:33:19.716Z",
+    "etag": "\"58-em7AS6zy+fGOusDsr2eMSBqHGvI\"",
+    "mtime": "2026-08-27T11:37:37.804Z",
     "size": 88,
-    "path": "../public/_nuxt/builds/meta/e166c06a-e998-47bd-b2bc-b1cbc27690d4.json"
+    "path": "../public/_nuxt/builds/meta/ee17b61a-5a5d-4ebf-85ee-f4a2a9e4c011.json"
   },
-  "/_nuxt/3f12i6t_.js": {
+  "/_nuxt/BuY7j6gU.js": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"2664-eGh1T6q/ns+9uPngK/9HTLnny3s\"",
-    "mtime": "2026-08-25T13:33:19.373Z",
-    "size": 9828,
-    "path": "../public/_nuxt/3f12i6t_.js"
+    "etag": "\"d31-i86rmh0q6d7IpKCul11GgflDiO0\"",
+    "mtime": "2026-08-27T11:37:37.515Z",
+    "size": 3377,
+    "path": "../public/_nuxt/BuY7j6gU.js"
   },
-  "/_nuxt/CLUEfNJR.js": {
+  "/_nuxt/BZtSAU41.js": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"d1a7-O838SlaDJ4rs6TlVmildnCl8Fd0\"",
-    "mtime": "2026-08-25T13:33:19.373Z",
-    "size": 53671,
-    "path": "../public/_nuxt/CLUEfNJR.js"
+    "etag": "\"2648-5l8MPGN6SjCZCXYtl4jZBnJM8Y0\"",
+    "mtime": "2026-08-27T11:37:37.513Z",
+    "size": 9800,
+    "path": "../public/_nuxt/BZtSAU41.js"
   },
-  "/_nuxt/CWI7fqvS.js": {
+  "/_nuxt/CAJKcNSf.js": {
     "type": "text/javascript; charset=utf-8",
-    "etag": "\"14d0c-SvpIGx/bcBY0r2XtA+IaLSxkL3s\"",
-    "mtime": "2026-08-25T13:33:19.374Z",
-    "size": 85260,
-    "path": "../public/_nuxt/CWI7fqvS.js"
+    "etag": "\"247a9-RbZCUM8k3Igi+nIsB3cZbwF/ZZs\"",
+    "mtime": "2026-08-27T11:37:37.513Z",
+    "size": 149417,
+    "path": "../public/_nuxt/CAJKcNSf.js"
   }
 };
 
@@ -5106,5 +5239,5 @@ function setupGracefulShutdown(listener, nitroApp) {
   });
 }
 
-export { $fetch as $, isScriptProtocol as A, withTrailingSlash as B, withoutTrailingSlash as C, trapUnhandledNodeErrors as a, useNitroApp as b, defineRenderHandler as c, destr as d, encodePath as e, createError$1 as f, getQuery as g, getRouteRules as h, joinURL as i, joinRelativeURL as j, getResponseStatusText as k, getResponseStatus as l, isEqual as m, stringifyParsedURL as n, stringifyQuery as o, parseQuery as p, hasProtocol as q, relative as r, setupGracefulShutdown as s, toNodeListener as t, useRuntimeConfig as u, defu as v, withQuery as w, sanitizeStatusCode as x, parseURL as y, decodePath as z };
+export { $fetch as $, isScriptProtocol as A, withTrailingSlash as B, withoutTrailingSlash as C, trapUnhandledNodeErrors as a, useNitroApp as b, defineRenderHandler as c, destr as d, encodePath as e, createError$1 as f, getQuery as g, getRouteRules as h, joinURL as i, joinRelativeURL as j, getResponseStatusText as k, getResponseStatus as l, isEqual as m, stringifyParsedURL as n, stringifyQuery as o, parseQuery as p, hasProtocol as q, relative as r, setupGracefulShutdown as s, toNodeListener as t, useRuntimeConfig as u, defu as v, withQuery as w, sanitizeStatusCode as x, parseURL as y, decodePath as z };;globalThis.__timing__.logEnd('Load chunks/_/nitro');
 //# sourceMappingURL=nitro.mjs.map

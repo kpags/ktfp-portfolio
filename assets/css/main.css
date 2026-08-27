@@ -38,7 +38,7 @@ h1 em, h2 em { font-family: 'Playfair Display', Georgia, serif; font-weight: 600
 .hero-copy { max-width: 420px; margin: 0 0 30px; color: #bbb8b2; font-size: 1rem; line-height: 1.65; }
 .play-button { padding: 14px 23px; border: 0; border-radius: 2px; background: #f5f1ea; color: #121212; font-weight: 700; font-size: .94rem; transition: transform .2s, background .2s; }
 .play-button:hover { transform: translateY(-3px); background: #fff; }.play-button b { margin-right: 10px; font-size: .75rem; }
-.home-image-showcase { position: absolute; z-index: 0; right: clamp(12vw, 18vw, 22vw); bottom: clamp(6vh, 12vh, 15vh); width: min(31vw, 390px); height: min(39vw, 480px); pointer-events: none; }
+.home-image-showcase { display: none; position: absolute; z-index: 0; right: clamp(12vw, 18vw, 22vw); bottom: clamp(6vh, 12vh, 15vh); width: min(31vw, 390px); height: min(39vw, 480px); pointer-events: none; }
 .home-image-group { position: absolute; inset: 0; opacity: 0; transform: scale(.94) translateY(14px); }
 .home-image-group--active { animation: homeImageFade 5s ease-in-out both; }
 .home-image-group img { position: absolute; top: 50%; left: 50%; width: 88%; height: 88%; object-fit: contain; filter: drop-shadow(0 18px 28px rgba(0,0,0,.38)); transform: translate(-50%, -50%); }
