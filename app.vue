@@ -37,6 +37,18 @@ const episodeThumbnailModules = import.meta.glob('./assets/episode_thumbnails/**
   query: '?url',
 }) as Record<string, string>
 
+const episodeOneCaptionModules = import.meta.glob('./assets/episode_contents/episode_one/**/caption.txt', {
+  eager: true,
+  import: 'default',
+  query: '?raw',
+}) as Record<string, string>
+
+const episodeOneMediaModules = import.meta.glob('./assets/episode_contents/episode_one/**/*.{mp4,webm,jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>
+
 const episodeFolderNames = ['one', 'two', 'three', 'four', 'five']
 const episodeClipSequences = episodeFolderNames.map(folder =>
   Object.entries(episodeThumbnailModules)
@@ -45,8 +57,78 @@ const episodeClipSequences = episodeFolderNames.map(folder =>
     .map(([, url]) => url),
 )
 
+type CaptionPart = { text: string; italic: boolean }
+type EpisodeTimestamp = {
+  folder: string
+  captionSegments: Array<{ parts: CaptionPart[] }>
+  media: Array<{ url: string; type: 'image' | 'video' }>
+}
+
+function getCaptionParts(segment: string): CaptionPart[] {
+  const parts: CaptionPart[] = []
+  const italicPattern = /<i>([\s\S]*?)<\/i>/gi
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  while ((match = italicPattern.exec(segment))) {
+    if (match.index > lastIndex) parts.push({ text: segment.slice(lastIndex, match.index), italic: false })
+    parts.push({ text: match[1], italic: true })
+    lastIndex = italicPattern.lastIndex
+  }
+
+  if (lastIndex < segment.length) parts.push({ text: segment.slice(lastIndex), italic: false })
+  return parts.length ? parts : [{ text: segment, italic: false }]
+}
+
+function splitCaption(caption: string) {
+  return caption
+    .trim()
+    .split(/\r?\n+/)
+    .flatMap(line => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/))
+    .map(segment => segment.trim())
+    .filter(Boolean)
+    .map(segment => ({ parts: getCaptionParts(segment) }))
+}
+
+const timestampNameOrder = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+const episodeOneTimestampFolders = [...new Set(
+  Object.keys(episodeOneCaptionModules)
+    .map(path => path.match(/\/timestamp_([^/]+)\/caption\.txt$/)?.[1])
+    .filter((folder): folder is string => Boolean(folder)),
+)].sort((first, second) => {
+  const firstNumeric = Number(first)
+  const secondNumeric = Number(second)
+  const firstOrder = Number.isFinite(firstNumeric) ? firstNumeric : timestampNameOrder.indexOf(first) + 1 || Number.MAX_SAFE_INTEGER
+  const secondOrder = Number.isFinite(secondNumeric) ? secondNumeric : timestampNameOrder.indexOf(second) + 1 || Number.MAX_SAFE_INTEGER
+  return firstOrder - secondOrder || first.localeCompare(second, undefined, { numeric: true })
+})
+
+const episodeOneTimestamps = episodeOneTimestampFolders
+  .map(folder => {
+    const directory = `/timestamp_${folder}/`
+    const caption = Object.entries(episodeOneCaptionModules).find(([path]) => path.includes(directory))?.[1]
+    const media = Object.entries(episodeOneMediaModules)
+      .filter(([path]) => path.includes(directory))
+      .map(([path, url]) => ({ path, url, type: /\.(mp4|webm)$/i.test(path) ? 'video' as const : 'image' as const }))
+      .sort((firstMedia, secondMedia) => {
+        if (firstMedia.type !== secondMedia.type) return firstMedia.type === 'image' ? -1 : 1
+        return firstMedia.path.localeCompare(secondMedia.path, undefined, { numeric: true })
+      })
+      .map(({ url, type }) => ({ url, type }))
+
+    return caption ? { folder, captionSegments: splitCaption(caption), media } : null
+  })
+  .filter((timestamp): timestamp is EpisodeTimestamp => timestamp !== null)
+
 const isLibraryOpen = ref(false)
+const isPlayerOpen = ref(false)
 const activeEpisode = ref(0)
+const hoveredEpisode = ref<number | null>(null)
+const isPlaybackActive = ref(true)
+const playbackPosition = ref(0)
+const activeTimestampIndex = ref(0)
+const activeCaptionIndex = ref(0)
+const activeMediaIndex = ref(0)
 const activeHomeImageGroup = ref(0)
 const isTransitioning = ref(false)
 const transitionPhase = ref<'idle' | 'leaving' | 'entering'>('idle')
@@ -65,6 +147,8 @@ const episodeVideoRefs: Array<HTMLVideoElement | null> = []
 let cursorStopTimer: ReturnType<typeof setTimeout> | undefined
 let trailAnimationFrame: number | undefined
 let homeImageTimer: ReturnType<typeof setInterval> | undefined
+let captionAdvanceTimer: ReturnType<typeof setTimeout> | undefined
+let mediaAdvanceTimer: ReturnType<typeof setTimeout> | undefined
 const episodePreviewTransitionTimers: Array<ReturnType<typeof setTimeout> | undefined> = []
 let hasPointerPosition = false
 
@@ -73,8 +157,26 @@ const episodes = [
   { number: '02', title: 'Education', label: 'The learning arc', className: 'education', clips: episodeClipSequences[1] },
   { number: '03', title: 'Skills', label: 'Tech & soft skills', className: 'skills', clips: episodeClipSequences[2] },
   { number: '04', title: 'Work Experience', label: 'Career highlights', className: 'work', clips: episodeClipSequences[3] },
-  { number: '05', title: 'Contact', label: 'Details & resume', className: 'contact', clips: episodeClipSequences[4] },
+  { number: '05', title: 'Contact Details & Resume', label: 'Details & resume', className: 'contact', clips: episodeClipSequences[4] },
 ]
+
+const displayedEpisode = computed(() => episodes[hoveredEpisode.value ?? activeEpisode.value])
+const playerEpisode = computed(() => episodes[activeEpisode.value])
+const activeTimestamp = computed(() => episodeOneTimestamps[activeTimestampIndex.value])
+const activeCaption = computed(() => activeTimestamp.value?.captionSegments[activeCaptionIndex.value])
+const activeMedia = computed(() => activeTimestamp.value?.media[activeMediaIndex.value])
+const captionSegmentDuration = 4.5
+const timestampStartPositions = computed(() => {
+  let position = 0
+  return episodeOneTimestamps.map(timestamp => {
+    const start = position
+    position += timestamp.captionSegments.length * captionSegmentDuration
+    return start
+  })
+})
+const playbackDuration = computed(() => activeEpisode.value === 0
+  ? Math.max(captionSegmentDuration, episodeOneTimestamps.reduce((total, timestamp) => total + timestamp.captionSegments.length * captionSegmentDuration, 0))
+  : 300)
 
 function beginTransition(event: MouseEvent, action: () => void) {
   if (isTransitioning.value) return
@@ -99,8 +201,91 @@ function openLibrary(event: MouseEvent) {
   beginTransition(event, () => { isLibraryOpen.value = true })
 }
 
-function selectEpisode(event: MouseEvent, index: number) {
-  beginTransition(event, () => { activeEpisode.value = index })
+function openEpisodePlayer(event: MouseEvent, index: number) {
+  beginTransition(event, () => {
+    activeEpisode.value = index
+    hoveredEpisode.value = null
+    playbackPosition.value = 0
+    isPlaybackActive.value = true
+    activeTimestampIndex.value = 0
+    activeCaptionIndex.value = 0
+    isPlayerOpen.value = true
+  })
+}
+
+function closePlayer(event: MouseEvent) {
+  beginTransition(event, () => { isPlayerOpen.value = false })
+}
+
+function setHoveredEpisode(index: number | null) {
+  hoveredEpisode.value = index
+}
+
+function changeEpisode(event: MouseEvent, direction: -1 | 1) {
+  const nextIndex = activeEpisode.value + direction
+  if (nextIndex < 0 || nextIndex >= episodes.length) return
+  beginTransition(event, () => {
+    activeEpisode.value = nextIndex
+    playbackPosition.value = 0
+    isPlaybackActive.value = true
+    activeTimestampIndex.value = 0
+    activeCaptionIndex.value = 0
+  })
+}
+
+function skipPlayback(seconds: number) {
+  seekPlayback(playbackPosition.value + seconds)
+}
+
+function selectTimestamp(index: number) {
+  seekPlayback(timestampStartPositions.value[index] ?? 0)
+}
+
+function seekPlayback(position: number) {
+  playbackPosition.value = Math.min(playbackDuration.value, Math.max(0, position))
+  if (activeEpisode.value !== 0 || !episodeOneTimestamps.length) return
+
+  let elapsed = 0
+  for (let index = 0; index < episodeOneTimestamps.length; index += 1) {
+    const timestamp = episodeOneTimestamps[index]
+    const timestampDuration = timestamp.captionSegments.length * captionSegmentDuration
+    if (playbackPosition.value < elapsed + timestampDuration || index === episodeOneTimestamps.length - 1) {
+      activeTimestampIndex.value = index
+      activeCaptionIndex.value = Math.min(
+        timestamp.captionSegments.length - 1,
+        Math.floor((playbackPosition.value - elapsed) / captionSegmentDuration),
+      )
+      return
+    }
+    elapsed += timestampDuration
+  }
+}
+
+function handleProgressInput(event: Event) {
+  seekPlayback(Number((event.target as HTMLInputElement).value))
+}
+
+function advanceTimestampMedia() {
+  const mediaCount = activeTimestamp.value?.media.length ?? 0
+  if (!mediaCount) return
+  activeMediaIndex.value = (activeMediaIndex.value + 1) % mediaCount
+}
+
+function scheduleMediaAdvance() {
+  if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer)
+  if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || activeMedia.value?.type !== 'image') return
+  mediaAdvanceTimer = window.setTimeout(advanceTimestampMedia, 3000)
+}
+
+function scheduleCaptionAdvance() {
+  if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer)
+  if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || !activeTimestamp.value) return
+
+  captionAdvanceTimer = window.setTimeout(() => {
+    const nextPosition = playbackPosition.value + captionSegmentDuration
+    seekPlayback(nextPosition)
+    if (nextPosition >= playbackDuration.value) isPlaybackActive.value = false
+  }, 4500)
 }
 
 function setEpisodeVideo(index: number, element: Element | null) {
@@ -202,10 +387,16 @@ onMounted(() => {
   }
 })
 
+watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeCaptionIndex], scheduleCaptionAdvance)
+watch([isPlayerOpen, activeEpisode, activeTimestampIndex], () => { activeMediaIndex.value = 0 })
+watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeMediaIndex], scheduleMediaAdvance)
+
 onBeforeUnmount(() => {
   if (cursorStopTimer) clearTimeout(cursorStopTimer)
   if (trailAnimationFrame) window.cancelAnimationFrame(trailAnimationFrame)
   if (homeImageTimer) clearInterval(homeImageTimer)
+  if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer)
+  if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer)
   episodePreviewTransitionTimers.forEach(timer => { if (timer) clearTimeout(timer) })
 })
 </script>
@@ -245,7 +436,7 @@ onBeforeUnmount(() => {
       <div class="droplet-field" aria-hidden="true"><span v-for="n in 8" :key="n"></span></div>
     </section>
 
-    <section v-if="isLibraryOpen" :class="['library', { 'library--leaving': transitionPhase === 'leaving', 'library--entering': transitionPhase === 'entering' }]" aria-labelledby="library-title">
+    <section v-if="isLibraryOpen && !isPlayerOpen" :class="['library', { 'library--leaving': transitionPhase === 'leaving', 'library--entering': transitionPhase === 'entering' }]" aria-labelledby="library-title">
       <nav class="nav">
         <button class="brand" aria-label="Back to home" @click="closeLibrary">KURT<span>PAGUIO</span></button>
         <button class="back-button" @click="closeLibrary">← Back</button>
@@ -263,10 +454,12 @@ onBeforeUnmount(() => {
           :key="episode.number"
           :class="['episode-card', `episode-card--${episode.className}`, { 'episode-card--active': activeEpisode === index }]"
           role="listitem"
-          :aria-pressed="activeEpisode === index"
-          @click="selectEpisode($event, index)"
-          @mouseenter="startEpisodePreview(index)"
-          @mouseleave="resetEpisodePreview(index)"
+          :aria-label="`Play episode ${episode.number}: ${episode.title}`"
+          @click="openEpisodePlayer($event, index)"
+          @mouseenter="startEpisodePreview(index); setHoveredEpisode(index)"
+          @mouseleave="resetEpisodePreview(index); setHoveredEpisode(null)"
+          @focus="setHoveredEpisode(index)"
+          @blur="setHoveredEpisode(null)"
         >
           <video
             v-if="episode.clips.length"
@@ -290,8 +483,68 @@ onBeforeUnmount(() => {
       <div class="episode-detail">
         <span class="detail-pulse"></span>
         <p>SELECTED EPISODE</p>
-        <strong>EP. {{ episodes[activeEpisode].number }} — {{ episodes[activeEpisode].title }}</strong>
+        <strong>EP. {{ displayedEpisode.number }} — {{ displayedEpisode.title }}</strong>
         <span>Content placeholder · Coming soon</span>
+      </div>
+    </section>
+
+    <section v-if="isPlayerOpen" :class="['player-page', { 'player-page--leaving': transitionPhase === 'leaving' }]" aria-labelledby="player-title">
+      <nav class="nav">
+        <button class="brand" aria-label="Back to home" @click="isPlayerOpen = false; isLibraryOpen = false">KURT<span>PAGUIO</span></button>
+        <button class="back-button" @click="closePlayer">← Episodes</button>
+      </nav>
+
+      <div class="player-content">
+        <p class="eyebrow">NOW PLAYING</p>
+        <div class="video-player" role="region" :aria-label="`Episode ${playerEpisode.number} video player`">
+          <div v-if="activeEpisode === 0 && activeTimestamp" class="episode-content-stage">
+            <h1 id="player-title" class="sr-only">{{ playerEpisode.title }}</h1>
+            <div class="timestamp-rail" :style="{ '--timestamp-count': episodeOneTimestamps.length }" aria-label="Episode one timestamps">
+              <button
+                v-for="(timestamp, index) in episodeOneTimestamps"
+                :key="timestamp.folder"
+                :class="['timestamp-button', { 'timestamp-button--active': activeTimestampIndex === index }]"
+                :aria-label="`Show timestamp ${index + 1}`"
+                :aria-pressed="activeTimestampIndex === index"
+                @click="selectTimestamp(index)"
+              >{{ String(index + 1).padStart(2, '0') }}</button>
+            </div>
+            <div class="episode-content-grid">
+              <div class="episode-caption" aria-live="polite">
+                <span class="episode-caption__count">{{ String(activeCaptionIndex + 1).padStart(2, '0') }} / {{ String(activeTimestamp.captionSegments.length).padStart(2, '0') }}</span>
+                <p v-if="activeCaption">
+                  <template v-for="(part, index) in activeCaption.parts" :key="index"><i v-if="part.italic">{{ part.text }}</i><template v-else>{{ part.text }}</template></template>
+                </p>
+              </div>
+              <div class="episode-media">
+                <Transition name="episode-media" mode="out-in">
+                  <div v-if="activeMedia" :key="activeMedia.url" class="episode-media__item">
+                    <video v-if="activeMedia.type === 'video'" :src="activeMedia.url" autoplay muted playsinline preload="metadata" aria-label="Episode one media" @ended="advanceTimestampMedia"></video>
+                    <img v-else :src="activeMedia.url" alt="Episode one media" />
+                  </div>
+                </Transition>
+              </div>
+            </div>
+          </div>
+          <div v-else class="video-player__screen">
+            <span>EP. {{ playerEpisode.number }}</span>
+            <h1 id="player-title">{{ playerEpisode.title }}</h1>
+            <p>Video coming soon</p>
+          </div>
+          <div class="video-player__controls">
+            <input :value="playbackPosition" class="progress-control" type="range" min="0" :max="playbackDuration" step=".1" aria-label="Video progress" @input="handleProgressInput" />
+            <div class="control-row">
+              <div class="control-group">
+                <button class="player-control" :disabled="activeEpisode === 0" aria-label="Previous episode" title="Previous episode" @click="changeEpisode($event, -1)">⏮</button>
+                <button class="player-control" aria-label="Previous 5 seconds" title="Previous 5 seconds" @click="skipPlayback(-5)">↶</button>
+                <button class="player-control player-control--primary" :aria-label="isPlaybackActive ? 'Pause' : 'Play'" :title="isPlaybackActive ? 'Pause' : 'Play'" @click="isPlaybackActive = !isPlaybackActive">{{ isPlaybackActive ? '❚❚' : '▶' }}</button>
+                <button class="player-control" aria-label="Next 5 seconds" title="Next 5 seconds" @click="skipPlayback(5)">↷</button>
+                <button class="player-control" :disabled="activeEpisode === episodes.length - 1" aria-label="Next episode" title="Next episode" @click="changeEpisode($event, 1)">⏭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="player-episode-meta"><span>EP. {{ playerEpisode.number }}</span><strong>{{ playerEpisode.title }}</strong><span>{{ playerEpisode.label }}</span></div>
       </div>
     </section>
   </main>

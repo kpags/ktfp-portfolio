@@ -1,4 +1,4 @@
-globalThis.__timing__.logStart('Load chunks/build/error-404-BLQW8do9');import { u as useHead$1, a as useRouter, e as encodeRoutePath, r as resolveRouteObject, n as navigateTo, b as useRuntimeConfig, c as useNuxtApp, d as nuxtLinkDefaults } from '../virtual/entry.mjs';
+globalThis.__timing__.logStart('Load chunks/build/error-404-BMA0kHfB');import { u as useHead$1, a as useRouter, e as encodeRoutePath, r as resolveRouteObject, n as navigateTo, b as useRuntimeConfig, c as useNuxtApp, d as nuxtLinkDefaults } from '../virtual/entry.mjs';
 import { _ as _plugin_vue_export_helper_default } from './_plugin-vue_export-helper-BOaGB7Aw.mjs';
 import { useSSRContext, mergeProps, withCtx, createTextVNode, toDisplayString, defineComponent, shallowRef, h, resolveComponent, computed, unref } from 'vue';
 import { q as hasProtocol, i as joinURL, p as parseQuery, A as isScriptProtocol, B as withTrailingSlash, C as withoutTrailingSlash } from '../_/nitro.mjs';
@@ -346,5 +346,5 @@ _sfc_main.setup = (props, ctx) => {
 };
 var error_404_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["__scopeId", "data-v-c6455d0c"]]);
 
-export { error_404_default as default };;globalThis.__timing__.logEnd('Load chunks/build/error-404-BLQW8do9');
-//# sourceMappingURL=error-404-BLQW8do9.mjs.map
+export { error_404_default as default };;globalThis.__timing__.logEnd('Load chunks/build/error-404-BMA0kHfB');
+//# sourceMappingURL=error-404-BMA0kHfB.mjs.map

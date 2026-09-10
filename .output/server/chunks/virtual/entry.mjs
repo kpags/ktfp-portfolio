@@ -1,9 +1,9 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};globalThis.__timing__.logStart('Load chunks/virtual/entry');import { defineProdDiagnostics } from 'nostics';
 import { ansiFormatter } from 'nostics/formatters/ansi';
-import { getCurrentScope, ref, watchEffect, getCurrentInstance, onBeforeUnmount, onDeactivated, onActivated, createApp, provide, onErrorCaptured, onServerPrefetch, unref, createVNode, resolveDynamicComponent, shallowReactive, reactive, effectScope, hasInjectionContext, inject, defineAsyncComponent, mergeProps, defineComponent, toRef, computed, h, isReadonly, useSSRContext, isRef, isShallow, isReactive, toRaw } from 'vue';
+import { getCurrentScope, ref, watchEffect, getCurrentInstance, onBeforeUnmount, onDeactivated, onActivated, createApp, provide, onErrorCaptured, onServerPrefetch, unref, createVNode, resolveDynamicComponent, shallowReactive, reactive, effectScope, hasInjectionContext, inject, defineAsyncComponent, mergeProps, defineComponent, computed, watch, toRef, h, isReadonly, useSSRContext, isRef, isShallow, isReactive, toRaw } from 'vue';
 import { f as createError, $ as $fetch, m as isEqual, n as stringifyParsedURL, o as stringifyQuery, p as parseQuery, q as hasProtocol, i as joinURL, v as defu, w as withQuery, x as sanitizeStatusCode, y as parseURL, e as encodePath, z as decodePath, A as isScriptProtocol } from '../_/nitro.mjs';
 import { i as injectHead$1, V as VueResolver, h as headSymbol, b as baseURL } from '../routes/renderer.mjs';
-import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrRenderList, ssrRenderStyle, ssrRenderClass, ssrRenderAttr, ssrInterpolate } from 'vue/server-renderer';
+import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrRenderList, ssrRenderStyle, ssrRenderClass, ssrRenderAttr, ssrInterpolate, ssrIncludeBooleanAttr } from 'vue/server-renderer';
 import { walkResolver } from 'unhead/utils';
 
 function useHead(input, options = {}) {
@@ -1086,16 +1086,77 @@ var _4_thumbnail_work_default = "" + __buildAssetsURL("4_thumbnail_work.DNpvCATb
 //#region assets/images/home/4_thumbnail_workmates.png?url
 var _4_thumbnail_workmates_default = "" + __buildAssetsURL("4_thumbnail_workmates.DHQkUie_.png");
 //#endregion
+//#region assets/episode_thumbnails/episode_five/contacts.mp4?url
+var contacts_default = "" + __buildAssetsURL("contacts.BmyxbZQk.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_four/1_work.mp4?url
+var _1_work_default = "" + __buildAssetsURL("1_work.B8zOyCD2.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_four/2_work.mp4?url
+var _2_work_default = "" + __buildAssetsURL("2_work.6jKvr-fH.mp4");
+//#endregion
 //#region assets/episode_thumbnails/episode_one/badminton.mp4?url
-var badminton_default = "" + __buildAssetsURL("badminton.Ca11r6KD.mp4");
+var badminton_default = "" + __buildAssetsURL("badminton.ZxgzYQnC.mp4");
 //#endregion
 //#region assets/episode_thumbnails/episode_one/programming.mp4?url
 var programming_default = "" + __buildAssetsURL("programming.CaDBM7O7.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_three/1_tech_skills.mp4?url
+var _1_tech_skills_default = "" + __buildAssetsURL("1_tech_skills.vryu5Kl9.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_three/2_soft_skills.mp4?url
+var _2_soft_skills_default = "" + __buildAssetsURL("2_soft_skills.CBg1fTQZ.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_two/defense.mp4?url
+var defense_default = "" + __buildAssetsURL("defense.5YxW4nUE.mp4");
+//#endregion
+//#region assets/episode_thumbnails/episode_two/graduation.mp4?url
+var graduation_default = "" + __buildAssetsURL("graduation.BtfL6Z3m.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_five/caption.txt?raw
+var caption_default$4 = "Lastly, before ending this 'About Me', I also love to watch series, especially anime.\r\n\r\n<i>Kaizoku-O ni ore wa naru!</i>, a quote from one piece because I love that anime. I recommend watching it 😎\r\n\r\nThat's it about me. Onto the next episode!";
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_four/caption.txt?raw
+var caption_default$3 = "Well, about music, I know how to sing but for videoke or comfort room only, not for competition or world class, okay?\r\n\r\nI also play piano when I'm not tapping my keyboard to code.\r\n\r\nI also play guitar but basic chords only. Those barre chords are pain in my butt 😓\r\n\r\nOverall, I love music. I like listening to music to relax and also while coding which reduces my stress especially when the error is just a missing semicolon or colon.";
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_one/caption.txt?raw
+var caption_default$2 = "I grew up curious about how technology works and how greatly it impacts people’s lives around the world. This curiosity led me to pursue a career in the IT industry, where I could continuously learn and explore different areas of technology.\r\n\r\nI have learned that technology is constantly evolving, with new tools, systems, and innovations being developed over time. I want to be part of the people who create and improve these technologies, which is why I always work hard to learn new things and develop my skills.\r\n\r\nAs a developer, I enjoy solving problems and using available resources to make applications as efficient as possible. I also value teamwork because I believe that many applications require collaboration, and working with others provides valuable opportunities to learn.\r\n\r\nI am always open to criticism because I see it as an opportunity to improve. I also believe that mistakes and failures are part of the learning process and are necessary steps toward success.\r\n";
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_three/caption.txt?raw
+var caption_default$1 = "Playing video games is a big part of my life. I cannot live without video games lol\r\n\r\nFor the genre, I mostly play FPS, Survival, Open-world, Zombie or Horror/Thriller, and RPG.\r\n\r\n";
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_two/caption.txt?raw
+var caption_default = "Oh, I also love playing sports!\r\n\r\nBadminton, Basketball, Bowling for now but I want to try many 😁\r\n\r\nI was once part of the athletics team before in my school as a hammer thrower. You know, those guys spinning then will throw a chained ball into the air.\r\n";
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_five/one.mp4?url
+var one_default$4 = "" + __buildAssetsURL("one.CRuQVMtV.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_five/two.mp4?url
+var two_default$1 = "" + __buildAssetsURL("two.Mn7V23aw.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_four/one.mp4?url
+var one_default$3 = "" + __buildAssetsURL("one.gtIPshN-.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_one/one.mp4?url
+var one_default$2 = "" + __buildAssetsURL("one.BvFbRTzz.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_three/one.mp4?url
+var one_default$1 = "" + __buildAssetsURL("one.BMVeOM2y.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_two/one.jpg?url
+var one_default = "" + __buildAssetsURL("one.H0HufYMz.jpg");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_two/three.jpg?url
+var three_default = "" + __buildAssetsURL("three.B0JpNHt1.jpg");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_two/two.mp4?url
+var two_default = "" + __buildAssetsURL("two.DGKz9HWs.mp4");
 //#endregion
 //#region assets/favicon/kp_favicon.ico
 var kp_favicon_default = "" + __buildAssetsURL("kp_favicon.B8zIlRr6.ico");
 //#endregion
 //#region app.vue?vue&type=script&setup=true&lang.ts
+var captionSegmentDuration = 4.5;
 var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
 	__name: "app",
 	__ssrInlineRender: true,
@@ -1127,8 +1188,32 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			return groups;
 		}, []);
 		const episodeThumbnailModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_thumbnails/episode_five/contacts.mp4": contacts_default,
+			"./assets/episode_thumbnails/episode_four/1_work.mp4": _1_work_default,
+			"./assets/episode_thumbnails/episode_four/2_work.mp4": _2_work_default,
 			"./assets/episode_thumbnails/episode_one/badminton.mp4": badminton_default,
-			"./assets/episode_thumbnails/episode_one/programming.mp4": programming_default
+			"./assets/episode_thumbnails/episode_one/programming.mp4": programming_default,
+			"./assets/episode_thumbnails/episode_three/1_tech_skills.mp4": _1_tech_skills_default,
+			"./assets/episode_thumbnails/episode_three/2_soft_skills.mp4": _2_soft_skills_default,
+			"./assets/episode_thumbnails/episode_two/defense.mp4": defense_default,
+			"./assets/episode_thumbnails/episode_two/graduation.mp4": graduation_default
+		});
+		const episodeOneCaptionModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_contents/episode_one/timestamp_five/caption.txt": caption_default$4,
+			"./assets/episode_contents/episode_one/timestamp_four/caption.txt": caption_default$3,
+			"./assets/episode_contents/episode_one/timestamp_one/caption.txt": caption_default$2,
+			"./assets/episode_contents/episode_one/timestamp_three/caption.txt": caption_default$1,
+			"./assets/episode_contents/episode_one/timestamp_two/caption.txt": caption_default
+		});
+		const episodeOneMediaModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_contents/episode_one/timestamp_five/one.mp4": one_default$4,
+			"./assets/episode_contents/episode_one/timestamp_five/two.mp4": two_default$1,
+			"./assets/episode_contents/episode_one/timestamp_four/one.mp4": one_default$3,
+			"./assets/episode_contents/episode_one/timestamp_one/one.mp4": one_default$2,
+			"./assets/episode_contents/episode_one/timestamp_three/one.mp4": one_default$1,
+			"./assets/episode_contents/episode_one/timestamp_two/one.jpg": one_default,
+			"./assets/episode_contents/episode_one/timestamp_two/three.jpg": three_default,
+			"./assets/episode_contents/episode_one/timestamp_two/two.mp4": two_default
 		});
 		const episodeFolderNames = [
 			"one",
@@ -1138,8 +1223,79 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"five"
 		];
 		const episodeClipSequences = episodeFolderNames.map((folder) => Object.entries(episodeThumbnailModules).filter(([path]) => path.includes(`/episode_${folder}/`)).sort(([firstPath], [secondPath]) => firstPath.localeCompare(secondPath)).map(([, url]) => url));
+		function getCaptionParts(segment) {
+			const parts = [];
+			const italicPattern = /<i>([\s\S]*?)<\/i>/gi;
+			let lastIndex = 0;
+			let match;
+			while (match = italicPattern.exec(segment)) {
+				if (match.index > lastIndex) parts.push({
+					text: segment.slice(lastIndex, match.index),
+					italic: false
+				});
+				parts.push({
+					text: match[1],
+					italic: true
+				});
+				lastIndex = italicPattern.lastIndex;
+			}
+			if (lastIndex < segment.length) parts.push({
+				text: segment.slice(lastIndex),
+				italic: false
+			});
+			return parts.length ? parts : [{
+				text: segment,
+				italic: false
+			}];
+		}
+		function splitCaption(caption) {
+			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)).map((segment) => segment.trim()).filter(Boolean).map((segment) => ({ parts: getCaptionParts(segment) }));
+		}
+		const timestampNameOrder = [
+			"one",
+			"two",
+			"three",
+			"four",
+			"five",
+			"six",
+			"seven",
+			"eight",
+			"nine",
+			"ten"
+		];
+		const episodeOneTimestamps = [...new Set(Object.keys(episodeOneCaptionModules).map((path) => path.match(/\/timestamp_([^/]+)\/caption\.txt$/)?.[1]).filter((folder) => Boolean(folder)))].sort((first, second) => {
+			const firstNumeric = Number(first);
+			const secondNumeric = Number(second);
+			return (Number.isFinite(firstNumeric) ? firstNumeric : timestampNameOrder.indexOf(first) + 1 || Number.MAX_SAFE_INTEGER) - (Number.isFinite(secondNumeric) ? secondNumeric : timestampNameOrder.indexOf(second) + 1 || Number.MAX_SAFE_INTEGER) || first.localeCompare(second, void 0, { numeric: true });
+		}).map((folder) => {
+			const directory = `/timestamp_${folder}/`;
+			const caption = Object.entries(episodeOneCaptionModules).find(([path]) => path.includes(directory))?.[1];
+			const media = Object.entries(episodeOneMediaModules).filter(([path]) => path.includes(directory)).map(([path, url]) => ({
+				path,
+				url,
+				type: /\.(mp4|webm)$/i.test(path) ? "video" : "image"
+			})).sort((firstMedia, secondMedia) => {
+				if (firstMedia.type !== secondMedia.type) return firstMedia.type === "image" ? -1 : 1;
+				return firstMedia.path.localeCompare(secondMedia.path, void 0, { numeric: true });
+			}).map(({ url, type }) => ({
+				url,
+				type
+			}));
+			return caption ? {
+				folder,
+				captionSegments: splitCaption(caption),
+				media
+			} : null;
+		}).filter((timestamp) => timestamp !== null);
 		const isLibraryOpen = ref(false);
+		const isPlayerOpen = ref(false);
 		const activeEpisode = ref(0);
+		const hoveredEpisode = ref(null);
+		const isPlaybackActive = ref(true);
+		const playbackPosition = ref(0);
+		const activeTimestampIndex = ref(0);
+		const activeCaptionIndex = ref(0);
+		const activeMediaIndex = ref(0);
 		const activeHomeImageGroup = ref(0);
 		const isTransitioning = ref(false);
 		const transitionPhase = ref("idle");
@@ -1160,6 +1316,8 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		const episodePreviewIndexes = ref(episodeFolderNames.map(() => 0));
 		const episodePreviewFading = ref(episodeFolderNames.map(() => false));
 		ref(null);
+		let captionAdvanceTimer;
+		let mediaAdvanceTimer;
 		const episodes = [
 			{
 				number: "01",
@@ -1191,12 +1349,81 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			},
 			{
 				number: "05",
-				title: "Contact",
+				title: "Contact Details & Resume",
 				label: "Details & resume",
 				className: "contact",
 				clips: episodeClipSequences[4]
 			}
 		];
+		const displayedEpisode = computed(() => episodes[hoveredEpisode.value ?? activeEpisode.value]);
+		const playerEpisode = computed(() => episodes[activeEpisode.value]);
+		const activeTimestamp = computed(() => episodeOneTimestamps[activeTimestampIndex.value]);
+		const activeCaption = computed(() => activeTimestamp.value?.captionSegments[activeCaptionIndex.value]);
+		const activeMedia = computed(() => activeTimestamp.value?.media[activeMediaIndex.value]);
+		computed(() => {
+			let position = 0;
+			return episodeOneTimestamps.map((timestamp) => {
+				const start = position;
+				position += timestamp.captionSegments.length * captionSegmentDuration;
+				return start;
+			});
+		});
+		const playbackDuration = computed(() => activeEpisode.value === 0 ? Math.max(captionSegmentDuration, episodeOneTimestamps.reduce((total, timestamp) => total + timestamp.captionSegments.length * captionSegmentDuration, 0)) : 300);
+		function seekPlayback(position) {
+			playbackPosition.value = Math.min(playbackDuration.value, Math.max(0, position));
+			if (activeEpisode.value !== 0 || !episodeOneTimestamps.length) return;
+			let elapsed = 0;
+			for (let index = 0; index < episodeOneTimestamps.length; index += 1) {
+				const timestamp = episodeOneTimestamps[index];
+				const timestampDuration = timestamp.captionSegments.length * captionSegmentDuration;
+				if (playbackPosition.value < elapsed + timestampDuration || index === episodeOneTimestamps.length - 1) {
+					activeTimestampIndex.value = index;
+					activeCaptionIndex.value = Math.min(timestamp.captionSegments.length - 1, Math.floor((playbackPosition.value - elapsed) / captionSegmentDuration));
+					return;
+				}
+				elapsed += timestampDuration;
+			}
+		}
+		function advanceTimestampMedia() {
+			const mediaCount = activeTimestamp.value?.media.length ?? 0;
+			if (!mediaCount) return;
+			activeMediaIndex.value = (activeMediaIndex.value + 1) % mediaCount;
+		}
+		function scheduleMediaAdvance() {
+			if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer);
+			if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || activeMedia.value?.type !== "image") return;
+			mediaAdvanceTimer = (void 0).setTimeout(advanceTimestampMedia, 3e3);
+		}
+		function scheduleCaptionAdvance() {
+			if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer);
+			if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || !activeTimestamp.value) return;
+			captionAdvanceTimer = (void 0).setTimeout(() => {
+				const nextPosition = playbackPosition.value + captionSegmentDuration;
+				seekPlayback(nextPosition);
+				if (nextPosition >= playbackDuration.value) isPlaybackActive.value = false;
+			}, 4500);
+		}
+		watch([
+			isPlayerOpen,
+			activeEpisode,
+			isPlaybackActive,
+			activeTimestampIndex,
+			activeCaptionIndex
+		], scheduleCaptionAdvance);
+		watch([
+			isPlayerOpen,
+			activeEpisode,
+			activeTimestampIndex
+		], () => {
+			activeMediaIndex.value = 0;
+		});
+		watch([
+			isPlayerOpen,
+			activeEpisode,
+			isPlaybackActive,
+			activeTimestampIndex,
+			activeMediaIndex
+		], scheduleMediaAdvance);
 		return (_ctx, _push, _parent, _attrs) => {
 			_push(`<main${ssrRenderAttrs(mergeProps({ class: "site-shell" }, _attrs))}>`);
 			if (unref(introComplete) && unref(cursorIsVisible)) {
@@ -1246,7 +1473,7 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 				});
 				_push(`<!--]--></div></section>`);
 			} else _push(`<!---->`);
-			if (unref(isLibraryOpen)) {
+			if (unref(isLibraryOpen) && !unref(isPlayerOpen)) {
 				_push(`<section class="${ssrRenderClass(["library", {
 					"library--leaving": unref(transitionPhase) === "leaving",
 					"library--entering": unref(transitionPhase) === "entering"
@@ -1256,12 +1483,41 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 						"episode-card",
 						`episode-card--${episode.className}`,
 						{ "episode-card--active": unref(activeEpisode) === index }
-					])}" role="listitem"${ssrRenderAttr("aria-pressed", unref(activeEpisode) === index)}>`);
+					])}" role="listitem"${ssrRenderAttr("aria-label", `Play episode ${episode.number}: ${episode.title}`)}>`);
 					if (episode.clips.length) _push(`<video class="${ssrRenderClass(["episode-preview", { "episode-preview--fading": unref(episodePreviewFading)[index] }])}"${ssrRenderAttr("src", episode.clips[unref(episodePreviewIndexes)[index]])} muted playsinline preload="metadata" aria-hidden="true"></video>`);
 					else _push(`<!---->`);
 					_push(`<span class="episode-index">EP. ${ssrInterpolate(episode.number)}</span><span class="episode-title">${ssrInterpolate(episode.title)}</span><span class="episode-subtitle">${ssrInterpolate(episode.label)}</span><span class="watch-icon">↗</span></button>`);
 				});
-				_push(`<!--]--></div><div class="episode-detail"><span class="detail-pulse"></span><p>SELECTED EPISODE</p><strong>EP. ${ssrInterpolate(episodes[unref(activeEpisode)].number)} — ${ssrInterpolate(episodes[unref(activeEpisode)].title)}</strong><span>Content placeholder · Coming soon</span></div></section>`);
+				_push(`<!--]--></div><div class="episode-detail"><span class="detail-pulse"></span><p>SELECTED EPISODE</p><strong>EP. ${ssrInterpolate(unref(displayedEpisode).number)} — ${ssrInterpolate(unref(displayedEpisode).title)}</strong><span>Content placeholder · Coming soon</span></div></section>`);
+			} else _push(`<!---->`);
+			if (unref(isPlayerOpen)) {
+				_push(`<section class="${ssrRenderClass(["player-page", { "player-page--leaving": unref(transitionPhase) === "leaving" }])}" aria-labelledby="player-title"><nav class="nav"><button class="brand" aria-label="Back to home">KURT<span>PAGUIO</span></button><button class="back-button">← Episodes</button></nav><div class="player-content"><p class="eyebrow">NOW PLAYING</p><div class="video-player" role="region"${ssrRenderAttr("aria-label", `Episode ${unref(playerEpisode).number} video player`)}>`);
+				if (unref(activeEpisode) === 0 && unref(activeTimestamp)) {
+					_push(`<div class="episode-content-stage"><h1 id="player-title" class="sr-only">${ssrInterpolate(unref(playerEpisode).title)}</h1><div class="timestamp-rail" style="${ssrRenderStyle({ "--timestamp-count": unref(episodeOneTimestamps).length })}" aria-label="Episode one timestamps"><!--[-->`);
+					ssrRenderList(unref(episodeOneTimestamps), (timestamp, index) => {
+						_push(`<button class="${ssrRenderClass(["timestamp-button", { "timestamp-button--active": unref(activeTimestampIndex) === index }])}"${ssrRenderAttr("aria-label", `Show timestamp ${index + 1}`)}${ssrRenderAttr("aria-pressed", unref(activeTimestampIndex) === index)}>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</button>`);
+					});
+					_push(`<!--]--></div><div class="episode-content-grid"><div class="episode-caption" aria-live="polite"><span class="episode-caption__count">${ssrInterpolate(String(unref(activeCaptionIndex) + 1).padStart(2, "0"))} / ${ssrInterpolate(String(unref(activeTimestamp).captionSegments.length).padStart(2, "0"))}</span>`);
+					if (unref(activeCaption)) {
+						_push(`<p><!--[-->`);
+						ssrRenderList(unref(activeCaption).parts, (part, index) => {
+							_push(`<!--[-->`);
+							if (part.italic) _push(`<i>${ssrInterpolate(part.text)}</i>`);
+							else _push(`<!--[-->${ssrInterpolate(part.text)}<!--]-->`);
+							_push(`<!--]-->`);
+						});
+						_push(`<!--]--></p>`);
+					} else _push(`<!---->`);
+					_push(`</div><div class="episode-media">`);
+					if (unref(activeMedia)) {
+						_push(`<div class="episode-media__item">`);
+						if (unref(activeMedia).type === "video") _push(`<video${ssrRenderAttr("src", unref(activeMedia).url)} autoplay muted playsinline preload="metadata" aria-label="Episode one media"></video>`);
+						else _push(`<img${ssrRenderAttr("src", unref(activeMedia).url)} alt="Episode one media">`);
+						_push(`</div>`);
+					} else _push(`<!---->`);
+					_push(`</div></div></div>`);
+				} else _push(`<div class="video-player__screen"><span>EP. ${ssrInterpolate(unref(playerEpisode).number)}</span><h1 id="player-title">${ssrInterpolate(unref(playerEpisode).title)}</h1><p>Video coming soon</p></div>`);
+				_push(`<div class="video-player__controls"><input${ssrRenderAttr("value", unref(playbackPosition))} class="progress-control" type="range" min="0"${ssrRenderAttr("max", unref(playbackDuration))} step=".1" aria-label="Video progress"><div class="control-row"><div class="control-group"><button class="player-control"${ssrIncludeBooleanAttr(unref(activeEpisode) === 0) ? " disabled" : ""} aria-label="Previous episode" title="Previous episode">⏮</button><button class="player-control" aria-label="Previous 5 seconds" title="Previous 5 seconds">↶</button><button class="player-control player-control--primary"${ssrRenderAttr("aria-label", unref(isPlaybackActive) ? "Pause" : "Play")}${ssrRenderAttr("title", unref(isPlaybackActive) ? "Pause" : "Play")}>${ssrInterpolate(unref(isPlaybackActive) ? "❚❚" : "▶")}</button><button class="player-control" aria-label="Next 5 seconds" title="Next 5 seconds">↷</button><button class="player-control"${ssrIncludeBooleanAttr(unref(activeEpisode) === episodes.length - 1) ? " disabled" : ""} aria-label="Next episode" title="Next episode">⏭</button></div></div></div></div><div class="player-episode-meta"><span>EP. ${ssrInterpolate(unref(playerEpisode).number)}</span><strong>${ssrInterpolate(unref(playerEpisode).title)}</strong><span>${ssrInterpolate(unref(playerEpisode).label)}</span></div></div></section>`);
 			} else _push(`<!---->`);
 			_push(`</main>`);
 		};
@@ -1289,7 +1545,7 @@ var _sfc_main$1 = {
 		const statusText = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
 		const description = _error.message || _error.toString();
 		const stack = void 0;
-		const _Error404 = defineAsyncComponent(() => import('../build/error-404-BLQW8do9.mjs'));
+		const _Error404 = defineAsyncComponent(() => import('../build/error-404-BMA0kHfB.mjs'));
 		const _Error = defineAsyncComponent(() => import('../build/error-500-DE5RylDA.mjs'));
 		const ErrorTemplate = is404 ? _Error404 : _Error;
 		return (_ctx, _push, _parent, _attrs) => {
