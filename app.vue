@@ -37,13 +37,13 @@ const episodeThumbnailModules = import.meta.glob('./assets/episode_thumbnails/**
   query: '?url',
 }) as Record<string, string>
 
-const episodeOneCaptionModules = import.meta.glob('./assets/episode_contents/episode_one/**/caption.txt', {
+const episodeContentCaptionModules = import.meta.glob('./assets/episode_contents/**/caption.txt', {
   eager: true,
   import: 'default',
   query: '?raw',
 }) as Record<string, string>
 
-const episodeOneMediaModules = import.meta.glob('./assets/episode_contents/episode_one/**/*.{mp4,webm,jpg,jpeg,png,webp}', {
+const episodeContentMediaModules = import.meta.glob('./assets/episode_contents/**/*.{mp4,webm,jpg,jpeg,png,webp}', {
   eager: true,
   import: 'default',
   query: '?url',
@@ -90,35 +90,49 @@ function splitCaption(caption: string) {
     .map(segment => ({ parts: getCaptionParts(segment) }))
 }
 
-const timestampNameOrder = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-const episodeOneTimestampFolders = [...new Set(
-  Object.keys(episodeOneCaptionModules)
-    .map(path => path.match(/\/timestamp_([^/]+)\/caption\.txt$/)?.[1])
-    .filter((folder): folder is string => Boolean(folder)),
-)].sort((first, second) => {
-  const firstNumeric = Number(first)
-  const secondNumeric = Number(second)
-  const firstOrder = Number.isFinite(firstNumeric) ? firstNumeric : timestampNameOrder.indexOf(first) + 1 || Number.MAX_SAFE_INTEGER
-  const secondOrder = Number.isFinite(secondNumeric) ? secondNumeric : timestampNameOrder.indexOf(second) + 1 || Number.MAX_SAFE_INTEGER
-  return firstOrder - secondOrder || first.localeCompare(second, undefined, { numeric: true })
-})
+const sequenceNameOrder = [
+  'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+  'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
+]
 
-const episodeOneTimestamps = episodeOneTimestampFolders
-  .map(folder => {
-    const directory = `/timestamp_${folder}/`
-    const caption = Object.entries(episodeOneCaptionModules).find(([path]) => path.includes(directory))?.[1]
-    const media = Object.entries(episodeOneMediaModules)
+function getSequenceOrder(name: string) {
+  const numericOrder = Number(name)
+  return Number.isFinite(numericOrder) ? numericOrder : sequenceNameOrder.indexOf(name.toLowerCase()) + 1 || Number.MAX_SAFE_INTEGER
+}
+
+function compareSequenceNames(first: string, second: string) {
+  return getSequenceOrder(first) - getSequenceOrder(second) || first.localeCompare(second, undefined, { numeric: true })
+}
+
+function getEpisodeTimestamps(episodeFolder: string): EpisodeTimestamp[] {
+  const episodeDirectory = `/episode_${episodeFolder}/`
+  const timestampFolders = [...new Set(
+    Object.keys(episodeContentCaptionModules)
+      .filter(path => path.includes(episodeDirectory))
+      .map(path => path.match(/\/timestamp_([^/]+)\/caption\.txt$/)?.[1])
+      .filter((folder): folder is string => Boolean(folder)),
+  )].sort((first, second) => {
+    return compareSequenceNames(first, second)
+  })
+
+  return timestampFolders
+    .map(folder => {
+      const directory = `${episodeDirectory}timestamp_${folder}/`
+      const caption = Object.entries(episodeContentCaptionModules).find(([path]) => path.includes(directory))?.[1]
+      const media = Object.entries(episodeContentMediaModules)
       .filter(([path]) => path.includes(directory))
       .map(([path, url]) => ({ path, url, type: /\.(mp4|webm)$/i.test(path) ? 'video' as const : 'image' as const }))
-      .sort((firstMedia, secondMedia) => {
-        if (firstMedia.type !== secondMedia.type) return firstMedia.type === 'image' ? -1 : 1
-        return firstMedia.path.localeCompare(secondMedia.path, undefined, { numeric: true })
-      })
+      .sort((firstMedia, secondMedia) => compareSequenceNames(
+        firstMedia.path.split('/').at(-1)?.replace(/\.[^.]+$/, '') ?? firstMedia.path,
+        secondMedia.path.split('/').at(-1)?.replace(/\.[^.]+$/, '') ?? secondMedia.path,
+      ))
       .map(({ url, type }) => ({ url, type }))
+      return caption ? { folder, captionSegments: splitCaption(caption), media } : null
+    })
+    .filter((timestamp): timestamp is EpisodeTimestamp => timestamp !== null)
+}
 
-    return caption ? { folder, captionSegments: splitCaption(caption), media } : null
-  })
-  .filter((timestamp): timestamp is EpisodeTimestamp => timestamp !== null)
+const episodeTimestampSequences = episodeFolderNames.map(getEpisodeTimestamps)
 
 const isLibraryOpen = ref(false)
 const isPlayerOpen = ref(false)
@@ -162,20 +176,21 @@ const episodes = [
 
 const displayedEpisode = computed(() => episodes[hoveredEpisode.value ?? activeEpisode.value])
 const playerEpisode = computed(() => episodes[activeEpisode.value])
-const activeTimestamp = computed(() => episodeOneTimestamps[activeTimestampIndex.value])
+const activeEpisodeTimestamps = computed(() => episodeTimestampSequences[activeEpisode.value] ?? [])
+const activeTimestamp = computed(() => activeEpisodeTimestamps.value[activeTimestampIndex.value])
 const activeCaption = computed(() => activeTimestamp.value?.captionSegments[activeCaptionIndex.value])
 const activeMedia = computed(() => activeTimestamp.value?.media[activeMediaIndex.value])
 const captionSegmentDuration = 4.5
 const timestampStartPositions = computed(() => {
   let position = 0
-  return episodeOneTimestamps.map(timestamp => {
+  return activeEpisodeTimestamps.value.map(timestamp => {
     const start = position
     position += timestamp.captionSegments.length * captionSegmentDuration
     return start
   })
 })
-const playbackDuration = computed(() => activeEpisode.value === 0
-  ? Math.max(captionSegmentDuration, episodeOneTimestamps.reduce((total, timestamp) => total + timestamp.captionSegments.length * captionSegmentDuration, 0))
+const playbackDuration = computed(() => activeEpisodeTimestamps.value.length
+  ? Math.max(captionSegmentDuration, activeEpisodeTimestamps.value.reduce((total, timestamp) => total + timestamp.captionSegments.length * captionSegmentDuration, 0))
   : 300)
 
 function beginTransition(event: MouseEvent, action: () => void) {
@@ -243,13 +258,13 @@ function selectTimestamp(index: number) {
 
 function seekPlayback(position: number) {
   playbackPosition.value = Math.min(playbackDuration.value, Math.max(0, position))
-  if (activeEpisode.value !== 0 || !episodeOneTimestamps.length) return
+  if (!activeEpisodeTimestamps.value.length) return
 
   let elapsed = 0
-  for (let index = 0; index < episodeOneTimestamps.length; index += 1) {
-    const timestamp = episodeOneTimestamps[index]
+  for (let index = 0; index < activeEpisodeTimestamps.value.length; index += 1) {
+    const timestamp = activeEpisodeTimestamps.value[index]
     const timestampDuration = timestamp.captionSegments.length * captionSegmentDuration
-    if (playbackPosition.value < elapsed + timestampDuration || index === episodeOneTimestamps.length - 1) {
+    if (playbackPosition.value < elapsed + timestampDuration || index === activeEpisodeTimestamps.value.length - 1) {
       activeTimestampIndex.value = index
       activeCaptionIndex.value = Math.min(
         timestamp.captionSegments.length - 1,
@@ -273,13 +288,13 @@ function advanceTimestampMedia() {
 
 function scheduleMediaAdvance() {
   if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer)
-  if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || activeMedia.value?.type !== 'image') return
+  if (!isPlayerOpen.value || !activeEpisodeTimestamps.value.length || !isPlaybackActive.value || activeMedia.value?.type !== 'image') return
   mediaAdvanceTimer = window.setTimeout(advanceTimestampMedia, 3000)
 }
 
 function scheduleCaptionAdvance() {
   if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer)
-  if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || !activeTimestamp.value) return
+  if (!isPlayerOpen.value || !activeEpisodeTimestamps.value.length || !isPlaybackActive.value || !activeTimestamp.value) return
 
   captionAdvanceTimer = window.setTimeout(() => {
     const nextPosition = playbackPosition.value + captionSegmentDuration
@@ -497,11 +512,11 @@ onBeforeUnmount(() => {
       <div class="player-content">
         <p class="eyebrow">NOW PLAYING</p>
         <div class="video-player" role="region" :aria-label="`Episode ${playerEpisode.number} video player`">
-          <div v-if="activeEpisode === 0 && activeTimestamp" class="episode-content-stage">
+          <div v-if="activeEpisodeTimestamps.length && activeTimestamp" class="episode-content-stage">
             <h1 id="player-title" class="sr-only">{{ playerEpisode.title }}</h1>
-            <div class="timestamp-rail" :style="{ '--timestamp-count': episodeOneTimestamps.length }" aria-label="Episode one timestamps">
+            <div class="timestamp-rail" :style="{ '--timestamp-count': activeEpisodeTimestamps.length }" :aria-label="`${playerEpisode.title} timestamps`">
               <button
-                v-for="(timestamp, index) in episodeOneTimestamps"
+                v-for="(timestamp, index) in activeEpisodeTimestamps"
                 :key="timestamp.folder"
                 :class="['timestamp-button', { 'timestamp-button--active': activeTimestampIndex === index }]"
                 :aria-label="`Show timestamp ${index + 1}`"
@@ -519,8 +534,8 @@ onBeforeUnmount(() => {
               <div class="episode-media">
                 <Transition name="episode-media" mode="out-in">
                   <div v-if="activeMedia" :key="activeMedia.url" class="episode-media__item">
-                    <video v-if="activeMedia.type === 'video'" :src="activeMedia.url" autoplay muted playsinline preload="metadata" aria-label="Episode one media" @ended="advanceTimestampMedia"></video>
-                    <img v-else :src="activeMedia.url" alt="Episode one media" />
+                    <video v-if="activeMedia.type === 'video'" :src="activeMedia.url" autoplay muted playsinline preload="metadata" :aria-label="`${playerEpisode.title} media`" @ended="advanceTimestampMedia"></video>
+                    <img v-else :src="activeMedia.url" :alt="`${playerEpisode.title} media`" />
                   </div>
                 </Transition>
               </div>

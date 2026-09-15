@@ -1114,43 +1114,91 @@ var defense_default = "" + __buildAssetsURL("defense.5YxW4nUE.mp4");
 var graduation_default = "" + __buildAssetsURL("graduation.BtfL6Z3m.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/caption.txt?raw
-var caption_default$4 = "Lastly, before ending this 'About Me', I also love to watch series, especially anime.\r\n\r\n<i>Kaizoku-O ni ore wa naru!</i>, a quote from one piece because I love that anime. I recommend watching it 😎\r\n\r\nThat's it about me. Onto the next episode!";
+var caption_default$7 = "Lastly, before ending this 'About Me', I also love to watch series, especially anime.\r\n\r\n<i>Kaizoku-O ni ore wa naru!</i>, a quote from one piece because I love that anime. I recommend watching it 😎\r\n\r\nThat's it about me. Onto the next episode!";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_four/caption.txt?raw
-var caption_default$3 = "Well, about music, I know how to sing but for videoke or comfort room only, not for competition or world class, okay?\r\n\r\nI also play piano when I'm not tapping my keyboard to code.\r\n\r\nI also play guitar but basic chords only. Those barre chords are pain in my butt 😓\r\n\r\nOverall, I love music. I like listening to music to relax and also while coding which reduces my stress especially when the error is just a missing semicolon or colon.";
+var caption_default$6 = "Well, about music, I know how to sing but for videoke or comfort room only, not for competition or world class, okay?\r\n\r\nI also play piano when I'm not tapping my keyboard to code.\r\n\r\nI also play guitar but basic chords only. Those barre chords are pain in my butt 😓\r\n\r\nOverall, I love music. I like listening to music to relax and also while coding which reduces my stress especially when the error is just a missing semicolon or colon.";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_one/caption.txt?raw
-var caption_default$2 = "I grew up curious about how technology works and how greatly it impacts people’s lives around the world. This curiosity led me to pursue a career in the IT industry, where I could continuously learn and explore different areas of technology.\r\n\r\nI have learned that technology is constantly evolving, with new tools, systems, and innovations being developed over time. I want to be part of the people who create and improve these technologies, which is why I always work hard to learn new things and develop my skills.\r\n\r\nAs a developer, I enjoy solving problems and using available resources to make applications as efficient as possible. I also value teamwork because I believe that many applications require collaboration, and working with others provides valuable opportunities to learn.\r\n\r\nI am always open to criticism because I see it as an opportunity to improve. I also believe that mistakes and failures are part of the learning process and are necessary steps toward success.\r\n";
+var caption_default$5 = "I grew up curious about how technology works and how greatly it impacts people’s lives around the world. This curiosity led me to pursue a career in the IT industry, where I could continuously learn and explore different areas of technology.\r\n\r\nI have learned that technology is constantly evolving, with new tools, systems, and innovations being developed over time. I want to be part of the people who create and improve these technologies, which is why I always work hard to learn new things and develop my skills.\r\n\r\nAs a developer, I enjoy solving problems and using available resources to make applications as efficient as possible. I also value teamwork because I believe that many applications require collaboration, and working with others provides valuable opportunities to learn.\r\n\r\nI am always open to criticism because I see it as an opportunity to improve. I also believe that mistakes and failures are part of the learning process and are necessary steps toward success.\r\n";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_three/caption.txt?raw
-var caption_default$1 = "Playing video games is a big part of my life. I cannot live without video games lol\r\n\r\nFor the genre, I mostly play FPS, Survival, Open-world, Zombie or Horror/Thriller, and RPG.\r\n\r\n";
+var caption_default$4 = "Playing video games is a big part of my life. I cannot live without video games lol\r\n\r\nFor the genre, I mostly play FPS, Survival, Open-world, Zombie or Horror/Thriller, and RPG.\r\n\r\n";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/caption.txt?raw
-var caption_default = "Oh, I also love playing sports!\r\n\r\nBadminton, Basketball, Bowling for now but I want to try many 😁\r\n\r\nI was once part of the athletics team before in my school as a hammer thrower. You know, those guys spinning then will throw a chained ball into the air.\r\n";
+var caption_default$3 = "Oh, I also love playing sports!\r\n\r\nBadminton, Basketball, Bowling for now but I want to try many 😁\r\n\r\nI was once part of the athletics team before in my school as a hammer thrower. You know, those guys spinning then will throw a chained ball into the air.\r\n";
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_one/caption.txt?raw
+var caption_default$2 = "For my education, I've started as Junior High School in University of Santo Tomas - Education High School.\r\n\r\nLots of memories here, like fun memories that I want to go back to if I can.\r\n\r\nThis was the time when I met lots of great friends that I have had contact with until now.\r\n\r\nBtw, I was introduced to HTML and CSS in our computer subject here 🤯";
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_three/caption.txt?raw
+var caption_default$1 = "Last and the finish line of my education, my college days. Still, same school but different level!\r\n\r\nI've enrolled in Information Technology - Web and Mobile App development course and this was where I've learned many things.\r\n\r\nThings about the tech, programming, network & security, automation, and others. I still choose programming.\r\n\r\nIt was also during COVID lockdown so online classes, really hard to focus because of the situation.\r\n\r\nBut still, I was able to strive, complete my subjects, and graduate 🎓";
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_two/caption.txt?raw
+var caption_default = "Next one is my Senior High School days. Same school but just different building...and level of course.\r\n\r\nThis was where I've encountered my first programing language in one of my subjects.\r\n\r\nThe C++. \r\n\r\nAnd gosh, I really sucked on that one.\r\n\r\nI've also encountered difficulties like calculus, physics, and other science stuffs but I still made it out alive 😮‍💨";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/one.mp4?url
-var one_default$4 = "" + __buildAssetsURL("one.CRuQVMtV.mp4");
+var one_default$7 = "" + __buildAssetsURL("one.CRuQVMtV.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/two.mp4?url
-var two_default$1 = "" + __buildAssetsURL("two.Mn7V23aw.mp4");
+var two_default$6 = "" + __buildAssetsURL("two.Mn7V23aw.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_four/one.mp4?url
-var one_default$3 = "" + __buildAssetsURL("one.gtIPshN-.mp4");
+var one_default$6 = "" + __buildAssetsURL("one.gtIPshN-.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_one/one.mp4?url
-var one_default$2 = "" + __buildAssetsURL("one.BvFbRTzz.mp4");
+var one_default$5 = "" + __buildAssetsURL("one.BvFbRTzz.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_one/two.mp4?url
+var two_default$5 = "" + __buildAssetsURL("two.B8WkncmE.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_three/one.mp4?url
-var one_default$1 = "" + __buildAssetsURL("one.BMVeOM2y.mp4");
+var one_default$4 = "" + __buildAssetsURL("one.BK0941ig.mp4");
+//#endregion
+//#region assets/episode_contents/episode_one/timestamp_three/two.mp4?url
+var two_default$4 = "" + __buildAssetsURL("two.DnKeH11Y.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/one.jpg?url
-var one_default = "" + __buildAssetsURL("one.H0HufYMz.jpg");
+var one_default$3 = "" + __buildAssetsURL("one.H0HufYMz.jpg");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/three.jpg?url
-var three_default = "" + __buildAssetsURL("three.B0JpNHt1.jpg");
+var three_default$3 = "" + __buildAssetsURL("three.B0JpNHt1.jpg");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/two.mp4?url
-var two_default = "" + __buildAssetsURL("two.DGKz9HWs.mp4");
+var two_default$3 = "" + __buildAssetsURL("two.DGKz9HWs.mp4");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_one/one.png?url
+var one_default$2 = "" + __buildAssetsURL("one.LQv0J4jm.png");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_one/three.jpeg?url
+var three_default$2 = "" + __buildAssetsURL("three.CWXI5R2b.jpeg");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_one/two.jpeg?url
+var two_default$2 = "" + __buildAssetsURL("two.v5dpvSO6.jpeg");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_three/four.mp4?url
+var four_default$1 = "" + __buildAssetsURL("four.7HL9mG16.mp4");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_three/one.png?url
+var one_default$1 = "" + __buildAssetsURL("one.HxKuFvbp.png");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_three/three.jpg?url
+var three_default$1 = "" + __buildAssetsURL("three.DgGgxQds.jpg");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_three/two.jpeg?url
+var two_default$1 = "" + __buildAssetsURL("two.jMd_P7yI.jpeg");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_two/four.jpg?url
+var four_default = "" + __buildAssetsURL("four.DF7gGoKn.jpg");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_two/one.png?url
+var one_default = "" + __buildAssetsURL("one.BAGbBgMn.png");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_two/three.jpg?url
+var three_default = "" + __buildAssetsURL("three.BwMWS0wL.jpg");
+//#endregion
+//#region assets/episode_contents/episode_two/timestamp_two/two.jpeg?url
+var two_default = "" + __buildAssetsURL("two.DpQPpJus.jpeg");
 //#endregion
 //#region assets/favicon/kp_favicon.ico
 var kp_favicon_default = "" + __buildAssetsURL("kp_favicon.B8zIlRr6.ico");
@@ -1198,22 +1246,38 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"./assets/episode_thumbnails/episode_two/defense.mp4": defense_default,
 			"./assets/episode_thumbnails/episode_two/graduation.mp4": graduation_default
 		});
-		const episodeOneCaptionModules = /* #__PURE__ */ Object.assign({
-			"./assets/episode_contents/episode_one/timestamp_five/caption.txt": caption_default$4,
-			"./assets/episode_contents/episode_one/timestamp_four/caption.txt": caption_default$3,
-			"./assets/episode_contents/episode_one/timestamp_one/caption.txt": caption_default$2,
-			"./assets/episode_contents/episode_one/timestamp_three/caption.txt": caption_default$1,
-			"./assets/episode_contents/episode_one/timestamp_two/caption.txt": caption_default
+		const episodeContentCaptionModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_contents/episode_one/timestamp_five/caption.txt": caption_default$7,
+			"./assets/episode_contents/episode_one/timestamp_four/caption.txt": caption_default$6,
+			"./assets/episode_contents/episode_one/timestamp_one/caption.txt": caption_default$5,
+			"./assets/episode_contents/episode_one/timestamp_three/caption.txt": caption_default$4,
+			"./assets/episode_contents/episode_one/timestamp_two/caption.txt": caption_default$3,
+			"./assets/episode_contents/episode_two/timestamp_one/caption.txt": caption_default$2,
+			"./assets/episode_contents/episode_two/timestamp_three/caption.txt": caption_default$1,
+			"./assets/episode_contents/episode_two/timestamp_two/caption.txt": caption_default
 		});
-		const episodeOneMediaModules = /* #__PURE__ */ Object.assign({
-			"./assets/episode_contents/episode_one/timestamp_five/one.mp4": one_default$4,
-			"./assets/episode_contents/episode_one/timestamp_five/two.mp4": two_default$1,
-			"./assets/episode_contents/episode_one/timestamp_four/one.mp4": one_default$3,
-			"./assets/episode_contents/episode_one/timestamp_one/one.mp4": one_default$2,
-			"./assets/episode_contents/episode_one/timestamp_three/one.mp4": one_default$1,
-			"./assets/episode_contents/episode_one/timestamp_two/one.jpg": one_default,
-			"./assets/episode_contents/episode_one/timestamp_two/three.jpg": three_default,
-			"./assets/episode_contents/episode_one/timestamp_two/two.mp4": two_default
+		const episodeContentMediaModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_contents/episode_one/timestamp_five/one.mp4": one_default$7,
+			"./assets/episode_contents/episode_one/timestamp_five/two.mp4": two_default$6,
+			"./assets/episode_contents/episode_one/timestamp_four/one.mp4": one_default$6,
+			"./assets/episode_contents/episode_one/timestamp_one/one.mp4": one_default$5,
+			"./assets/episode_contents/episode_one/timestamp_one/two.mp4": two_default$5,
+			"./assets/episode_contents/episode_one/timestamp_three/one.mp4": one_default$4,
+			"./assets/episode_contents/episode_one/timestamp_three/two.mp4": two_default$4,
+			"./assets/episode_contents/episode_one/timestamp_two/one.jpg": one_default$3,
+			"./assets/episode_contents/episode_one/timestamp_two/three.jpg": three_default$3,
+			"./assets/episode_contents/episode_one/timestamp_two/two.mp4": two_default$3,
+			"./assets/episode_contents/episode_two/timestamp_one/one.png": one_default$2,
+			"./assets/episode_contents/episode_two/timestamp_one/three.jpeg": three_default$2,
+			"./assets/episode_contents/episode_two/timestamp_one/two.jpeg": two_default$2,
+			"./assets/episode_contents/episode_two/timestamp_three/four.mp4": four_default$1,
+			"./assets/episode_contents/episode_two/timestamp_three/one.png": one_default$1,
+			"./assets/episode_contents/episode_two/timestamp_three/three.jpg": three_default$1,
+			"./assets/episode_contents/episode_two/timestamp_three/two.jpeg": two_default$1,
+			"./assets/episode_contents/episode_two/timestamp_two/four.jpg": four_default,
+			"./assets/episode_contents/episode_two/timestamp_two/one.png": one_default,
+			"./assets/episode_contents/episode_two/timestamp_two/three.jpg": three_default,
+			"./assets/episode_contents/episode_two/timestamp_two/two.jpeg": two_default
 		});
 		const episodeFolderNames = [
 			"one",
@@ -1251,7 +1315,7 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		function splitCaption(caption) {
 			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)).map((segment) => segment.trim()).filter(Boolean).map((segment) => ({ parts: getCaptionParts(segment) }));
 		}
-		const timestampNameOrder = [
+		const sequenceNameOrder = [
 			"one",
 			"two",
 			"three",
@@ -1261,32 +1325,48 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"seven",
 			"eight",
 			"nine",
-			"ten"
+			"ten",
+			"eleven",
+			"twelve",
+			"thirteen",
+			"fourteen",
+			"fifteen",
+			"sixteen",
+			"seventeen",
+			"eighteen",
+			"nineteen",
+			"twenty"
 		];
-		const episodeOneTimestamps = [...new Set(Object.keys(episodeOneCaptionModules).map((path) => path.match(/\/timestamp_([^/]+)\/caption\.txt$/)?.[1]).filter((folder) => Boolean(folder)))].sort((first, second) => {
-			const firstNumeric = Number(first);
-			const secondNumeric = Number(second);
-			return (Number.isFinite(firstNumeric) ? firstNumeric : timestampNameOrder.indexOf(first) + 1 || Number.MAX_SAFE_INTEGER) - (Number.isFinite(secondNumeric) ? secondNumeric : timestampNameOrder.indexOf(second) + 1 || Number.MAX_SAFE_INTEGER) || first.localeCompare(second, void 0, { numeric: true });
-		}).map((folder) => {
-			const directory = `/timestamp_${folder}/`;
-			const caption = Object.entries(episodeOneCaptionModules).find(([path]) => path.includes(directory))?.[1];
-			const media = Object.entries(episodeOneMediaModules).filter(([path]) => path.includes(directory)).map(([path, url]) => ({
-				path,
-				url,
-				type: /\.(mp4|webm)$/i.test(path) ? "video" : "image"
-			})).sort((firstMedia, secondMedia) => {
-				if (firstMedia.type !== secondMedia.type) return firstMedia.type === "image" ? -1 : 1;
-				return firstMedia.path.localeCompare(secondMedia.path, void 0, { numeric: true });
-			}).map(({ url, type }) => ({
-				url,
-				type
-			}));
-			return caption ? {
-				folder,
-				captionSegments: splitCaption(caption),
-				media
-			} : null;
-		}).filter((timestamp) => timestamp !== null);
+		function getSequenceOrder(name) {
+			const numericOrder = Number(name);
+			return Number.isFinite(numericOrder) ? numericOrder : sequenceNameOrder.indexOf(name.toLowerCase()) + 1 || Number.MAX_SAFE_INTEGER;
+		}
+		function compareSequenceNames(first, second) {
+			return getSequenceOrder(first) - getSequenceOrder(second) || first.localeCompare(second, void 0, { numeric: true });
+		}
+		function getEpisodeTimestamps(episodeFolder) {
+			const episodeDirectory = `/episode_${episodeFolder}/`;
+			return [...new Set(Object.keys(episodeContentCaptionModules).filter((path) => path.includes(episodeDirectory)).map((path) => path.match(/\/timestamp_([^/]+)\/caption\.txt$/)?.[1]).filter((folder) => Boolean(folder)))].sort((first, second) => {
+				return compareSequenceNames(first, second);
+			}).map((folder) => {
+				const directory = `${episodeDirectory}timestamp_${folder}/`;
+				const caption = Object.entries(episodeContentCaptionModules).find(([path]) => path.includes(directory))?.[1];
+				const media = Object.entries(episodeContentMediaModules).filter(([path]) => path.includes(directory)).map(([path, url]) => ({
+					path,
+					url,
+					type: /\.(mp4|webm)$/i.test(path) ? "video" : "image"
+				})).sort((firstMedia, secondMedia) => compareSequenceNames(firstMedia.path.split("/").at(-1)?.replace(/\.[^.]+$/, "") ?? firstMedia.path, secondMedia.path.split("/").at(-1)?.replace(/\.[^.]+$/, "") ?? secondMedia.path)).map(({ url, type }) => ({
+					url,
+					type
+				}));
+				return caption ? {
+					folder,
+					captionSegments: splitCaption(caption),
+					media
+				} : null;
+			}).filter((timestamp) => timestamp !== null);
+		}
+		const episodeTimestampSequences = episodeFolderNames.map(getEpisodeTimestamps);
 		const isLibraryOpen = ref(false);
 		const isPlayerOpen = ref(false);
 		const activeEpisode = ref(0);
@@ -1357,26 +1437,27 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		];
 		const displayedEpisode = computed(() => episodes[hoveredEpisode.value ?? activeEpisode.value]);
 		const playerEpisode = computed(() => episodes[activeEpisode.value]);
-		const activeTimestamp = computed(() => episodeOneTimestamps[activeTimestampIndex.value]);
+		const activeEpisodeTimestamps = computed(() => episodeTimestampSequences[activeEpisode.value] ?? []);
+		const activeTimestamp = computed(() => activeEpisodeTimestamps.value[activeTimestampIndex.value]);
 		const activeCaption = computed(() => activeTimestamp.value?.captionSegments[activeCaptionIndex.value]);
 		const activeMedia = computed(() => activeTimestamp.value?.media[activeMediaIndex.value]);
 		computed(() => {
 			let position = 0;
-			return episodeOneTimestamps.map((timestamp) => {
+			return activeEpisodeTimestamps.value.map((timestamp) => {
 				const start = position;
 				position += timestamp.captionSegments.length * captionSegmentDuration;
 				return start;
 			});
 		});
-		const playbackDuration = computed(() => activeEpisode.value === 0 ? Math.max(captionSegmentDuration, episodeOneTimestamps.reduce((total, timestamp) => total + timestamp.captionSegments.length * captionSegmentDuration, 0)) : 300);
+		const playbackDuration = computed(() => activeEpisodeTimestamps.value.length ? Math.max(captionSegmentDuration, activeEpisodeTimestamps.value.reduce((total, timestamp) => total + timestamp.captionSegments.length * captionSegmentDuration, 0)) : 300);
 		function seekPlayback(position) {
 			playbackPosition.value = Math.min(playbackDuration.value, Math.max(0, position));
-			if (activeEpisode.value !== 0 || !episodeOneTimestamps.length) return;
+			if (!activeEpisodeTimestamps.value.length) return;
 			let elapsed = 0;
-			for (let index = 0; index < episodeOneTimestamps.length; index += 1) {
-				const timestamp = episodeOneTimestamps[index];
+			for (let index = 0; index < activeEpisodeTimestamps.value.length; index += 1) {
+				const timestamp = activeEpisodeTimestamps.value[index];
 				const timestampDuration = timestamp.captionSegments.length * captionSegmentDuration;
-				if (playbackPosition.value < elapsed + timestampDuration || index === episodeOneTimestamps.length - 1) {
+				if (playbackPosition.value < elapsed + timestampDuration || index === activeEpisodeTimestamps.value.length - 1) {
 					activeTimestampIndex.value = index;
 					activeCaptionIndex.value = Math.min(timestamp.captionSegments.length - 1, Math.floor((playbackPosition.value - elapsed) / captionSegmentDuration));
 					return;
@@ -1391,12 +1472,12 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		}
 		function scheduleMediaAdvance() {
 			if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer);
-			if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || activeMedia.value?.type !== "image") return;
+			if (!isPlayerOpen.value || !activeEpisodeTimestamps.value.length || !isPlaybackActive.value || activeMedia.value?.type !== "image") return;
 			mediaAdvanceTimer = (void 0).setTimeout(advanceTimestampMedia, 3e3);
 		}
 		function scheduleCaptionAdvance() {
 			if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer);
-			if (!isPlayerOpen.value || activeEpisode.value !== 0 || !isPlaybackActive.value || !activeTimestamp.value) return;
+			if (!isPlayerOpen.value || !activeEpisodeTimestamps.value.length || !isPlaybackActive.value || !activeTimestamp.value) return;
 			captionAdvanceTimer = (void 0).setTimeout(() => {
 				const nextPosition = playbackPosition.value + captionSegmentDuration;
 				seekPlayback(nextPosition);
@@ -1492,9 +1573,9 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			} else _push(`<!---->`);
 			if (unref(isPlayerOpen)) {
 				_push(`<section class="${ssrRenderClass(["player-page", { "player-page--leaving": unref(transitionPhase) === "leaving" }])}" aria-labelledby="player-title"><nav class="nav"><button class="brand" aria-label="Back to home">KURT<span>PAGUIO</span></button><button class="back-button">← Episodes</button></nav><div class="player-content"><p class="eyebrow">NOW PLAYING</p><div class="video-player" role="region"${ssrRenderAttr("aria-label", `Episode ${unref(playerEpisode).number} video player`)}>`);
-				if (unref(activeEpisode) === 0 && unref(activeTimestamp)) {
-					_push(`<div class="episode-content-stage"><h1 id="player-title" class="sr-only">${ssrInterpolate(unref(playerEpisode).title)}</h1><div class="timestamp-rail" style="${ssrRenderStyle({ "--timestamp-count": unref(episodeOneTimestamps).length })}" aria-label="Episode one timestamps"><!--[-->`);
-					ssrRenderList(unref(episodeOneTimestamps), (timestamp, index) => {
+				if (unref(activeEpisodeTimestamps).length && unref(activeTimestamp)) {
+					_push(`<div class="episode-content-stage"><h1 id="player-title" class="sr-only">${ssrInterpolate(unref(playerEpisode).title)}</h1><div class="timestamp-rail" style="${ssrRenderStyle({ "--timestamp-count": unref(activeEpisodeTimestamps).length })}"${ssrRenderAttr("aria-label", `${unref(playerEpisode).title} timestamps`)}><!--[-->`);
+					ssrRenderList(unref(activeEpisodeTimestamps), (timestamp, index) => {
 						_push(`<button class="${ssrRenderClass(["timestamp-button", { "timestamp-button--active": unref(activeTimestampIndex) === index }])}"${ssrRenderAttr("aria-label", `Show timestamp ${index + 1}`)}${ssrRenderAttr("aria-pressed", unref(activeTimestampIndex) === index)}>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</button>`);
 					});
 					_push(`<!--]--></div><div class="episode-content-grid"><div class="episode-caption" aria-live="polite"><span class="episode-caption__count">${ssrInterpolate(String(unref(activeCaptionIndex) + 1).padStart(2, "0"))} / ${ssrInterpolate(String(unref(activeTimestamp).captionSegments.length).padStart(2, "0"))}</span>`);
@@ -1511,8 +1592,8 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 					_push(`</div><div class="episode-media">`);
 					if (unref(activeMedia)) {
 						_push(`<div class="episode-media__item">`);
-						if (unref(activeMedia).type === "video") _push(`<video${ssrRenderAttr("src", unref(activeMedia).url)} autoplay muted playsinline preload="metadata" aria-label="Episode one media"></video>`);
-						else _push(`<img${ssrRenderAttr("src", unref(activeMedia).url)} alt="Episode one media">`);
+						if (unref(activeMedia).type === "video") _push(`<video${ssrRenderAttr("src", unref(activeMedia).url)} autoplay muted playsinline preload="metadata"${ssrRenderAttr("aria-label", `${unref(playerEpisode).title} media`)}></video>`);
+						else _push(`<img${ssrRenderAttr("src", unref(activeMedia).url)}${ssrRenderAttr("alt", `${unref(playerEpisode).title} media`)}>`);
 						_push(`</div>`);
 					} else _push(`<!---->`);
 					_push(`</div></div></div>`);
