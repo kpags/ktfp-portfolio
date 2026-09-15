@@ -1,4 +1,4 @@
-import { u as useRuntimeConfig, e as encodePath, j as joinRelativeURL, c as defineRenderHandler, g as getQuery, f as createError, d as destr, h as getRouteRules, r as relative, i as joinURL, k as getResponseStatusText, l as getResponseStatus, b as useNitroApp } from '../_/nitro.mjs';
+globalThis.__timing__.logStart('Load chunks/routes//renderer');import { u as useRuntimeConfig, e as encodePath, j as joinRelativeURL, c as defineRenderHandler, g as getQuery, f as createError, d as destr, h as getRouteRules, r as relative, i as joinURL, k as getResponseStatusText, l as getResponseStatus, b as useNitroApp } from '../_/nitro.mjs';
 import { createHead as createHead$1, propsToString, renderSSRHead } from 'unhead/server';
 import { hasInjectionContext, inject, isRef, toValue } from 'vue';
 import { DeprecationsPlugin } from 'unhead/legacy';
@@ -259,7 +259,7 @@ const renderSSRHeadOptions = {"omitLineBreaks":true};
 
 const entryIds = [];
 
-const entryFileName = "CngRSLkG.js";
+const entryFileName = "BWjIfFLl.js";
 
 //#region src/runtime/handlers/renderer.ts
 globalThis.__buildAssetsURL = buildAssetsURL;
@@ -418,5 +418,5 @@ const renderer = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 	default: handler
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { VueResolver as V, baseURL as b, headSymbol as h, injectHead as i, renderer as r };
+export { VueResolver as V, baseURL as b, headSymbol as h, injectHead as i, renderer as r };;globalThis.__timing__.logEnd('Load chunks/routes//renderer');
 //# sourceMappingURL=renderer.mjs.map

@@ -145,6 +145,8 @@ const activeCaptionIndex = ref(0)
 const activeMediaIndex = ref(0)
 const activeHomeImageGroup = ref(0)
 const isTransitioning = ref(false)
+const isEpisodeLoading = ref(false)
+const rippleDirection = ref<'previous' | 'next' | null>(null)
 const transitionPhase = ref<'idle' | 'leaving' | 'entering'>('idle')
 const introComplete = ref(false)
 const portalStyle = ref<Record<string, string>>({})
@@ -158,6 +160,7 @@ const episodePreviewIndexes = ref(episodeFolderNames.map(() => 0))
 const episodePreviewFading = ref(episodeFolderNames.map(() => false))
 const previewingEpisode = ref<number | null>(null)
 const episodeVideoRefs: Array<HTMLVideoElement | null> = []
+const episodePreloadPromises = new Map<number, Promise<void>>()
 let cursorStopTimer: ReturnType<typeof setTimeout> | undefined
 let trailAnimationFrame: number | undefined
 let homeImageTimer: ReturnType<typeof setInterval> | undefined
@@ -212,20 +215,86 @@ function beginTransition(event: MouseEvent, action: () => void) {
   }, 500)
 }
 
+function beginDirectionalTransition(direction: 'previous' | 'next', action: () => void) {
+  if (isTransitioning.value) return
+  isTransitioning.value = true
+  rippleDirection.value = direction
+  transitionPhase.value = 'leaving'
+  window.setTimeout(() => {
+    action()
+    transitionPhase.value = 'entering'
+    window.setTimeout(() => {
+      isTransitioning.value = false
+      rippleDirection.value = null
+      transitionPhase.value = 'idle'
+    }, 420)
+  }, 420)
+}
+
+function activateEpisode(index: number, openPlayer = false) {
+  activeEpisode.value = index
+  hoveredEpisode.value = null
+  playbackPosition.value = 0
+  isPlaybackActive.value = true
+  activeTimestampIndex.value = 0
+  activeCaptionIndex.value = 0
+  if (openPlayer) isPlayerOpen.value = true
+}
+
+function preloadMedia(url: string, type: 'image' | 'video') {
+  return new Promise<void>((resolve) => {
+    if (type === 'image') {
+      const image = new Image()
+      image.onload = () => resolve()
+      image.onerror = () => resolve()
+      image.src = url
+      return
+    }
+
+    const video = document.createElement('video')
+    video.preload = 'auto'
+    video.muted = true
+    video.oncanplaythrough = () => resolve()
+    video.onerror = () => resolve()
+    video.src = url
+    video.load()
+  })
+}
+
+function preloadEpisodeContents(index: number) {
+  const existingPreload = episodePreloadPromises.get(index)
+  if (existingPreload) return existingPreload
+
+  const media = (episodeTimestampSequences[index] ?? []).flatMap(timestamp => timestamp.media)
+  const preload = Promise.all(media.map(item => preloadMedia(item.url, item.type))).then(() => undefined)
+  episodePreloadPromises.set(index, preload)
+  return preload
+}
+
+async function prepareEpisodeContents(index: number) {
+  const hasContent = (episodeTimestampSequences[index] ?? []).some(timestamp => timestamp.media.length)
+  const isCached = episodePreloadPromises.has(index)
+  if (!hasContent || isCached) {
+    await preloadEpisodeContents(index)
+    return
+  }
+
+  isEpisodeLoading.value = true
+  try {
+    await preloadEpisodeContents(index)
+  } finally {
+    isEpisodeLoading.value = false
+  }
+}
+
 function openLibrary(event: MouseEvent) {
   beginTransition(event, () => { isLibraryOpen.value = true })
 }
 
-function openEpisodePlayer(event: MouseEvent, index: number) {
-  beginTransition(event, () => {
-    activeEpisode.value = index
-    hoveredEpisode.value = null
-    playbackPosition.value = 0
-    isPlaybackActive.value = true
-    activeTimestampIndex.value = 0
-    activeCaptionIndex.value = 0
-    isPlayerOpen.value = true
-  })
+async function openEpisodePlayer(event: MouseEvent, index: number) {
+  if (isTransitioning.value || isEpisodeLoading.value) return
+  await prepareEpisodeContents(index)
+  beginTransition(event, () => { activateEpisode(index, true) })
 }
 
 function closePlayer(event: MouseEvent) {
@@ -236,16 +305,11 @@ function setHoveredEpisode(index: number | null) {
   hoveredEpisode.value = index
 }
 
-function changeEpisode(event: MouseEvent, direction: -1 | 1) {
+async function changeEpisode(event: MouseEvent, direction: -1 | 1) {
   const nextIndex = activeEpisode.value + direction
-  if (nextIndex < 0 || nextIndex >= episodes.length) return
-  beginTransition(event, () => {
-    activeEpisode.value = nextIndex
-    playbackPosition.value = 0
-    isPlaybackActive.value = true
-    activeTimestampIndex.value = 0
-    activeCaptionIndex.value = 0
-  })
+  if (nextIndex < 0 || nextIndex >= episodes.length || isTransitioning.value || isEpisodeLoading.value) return
+  await prepareEpisodeContents(nextIndex)
+  beginDirectionalTransition(direction === -1 ? 'previous' : 'next', () => { activateEpisode(nextIndex) })
 }
 
 function skipPlayback(seconds: number) {
@@ -422,10 +486,16 @@ onBeforeUnmount(() => {
       <span v-if="!cursorIsInteractive" v-for="(point, index) in trailPoints" :key="index" class="cursor-tail" :style="{ left: `${point.x}px`, top: `${point.y}px`, width: `${8 - index}px`, height: `${8 - index}px`, opacity: `${.5 - index * .06}` }" aria-hidden="true"></span>
       <div :class="['cursor', { 'cursor--interactive': cursorIsInteractive, 'cursor--moving': cursorIsMoving }]" :style="cursorStyle" aria-hidden="true"></div>
     </template>
+    <Transition name="content-loader">
+      <div v-if="isEpisodeLoading" class="content-loader" role="status" aria-live="polite" aria-label="Wait for a moment">
+        <span v-for="(character, index) in 'Wait for a moment...'.split('')" :key="index" class="content-loader__letter" :style="{ '--letter-index': index }">{{ character === ' ' ? '\u00a0' : character }}</span>
+      </div>
+    </Transition>
     <section v-if="!introComplete" class="intro" aria-label="Kurt Paguio">
       <p class="intro-kurt">KURT</p><p class="intro-paguio">PAGUIO</p>
     </section>
-    <div v-if="isTransitioning" class="portal" :style="portalStyle" aria-hidden="true"><span></span><span></span></div>
+    <div v-if="isTransitioning && !rippleDirection" class="portal" :style="portalStyle" aria-hidden="true"><span></span><span></span></div>
+    <div v-if="rippleDirection" :class="['episode-ripple', `episode-ripple--${rippleDirection}`]" aria-hidden="true"><span></span><span></span></div>
     <section v-if="!isLibraryOpen" :class="['hero', { 'hero--leaving': transitionPhase === 'leaving' }]" aria-labelledby="hero-title">
       <nav class="nav">
         <button class="brand" aria-label="Kurt Paguio home" @click="isLibraryOpen = false">KURT<span>PAGUIO</span></button>
@@ -473,6 +543,9 @@ onBeforeUnmount(() => {
           @click="openEpisodePlayer($event, index)"
           @mouseenter="startEpisodePreview(index); setHoveredEpisode(index)"
           @mouseleave="resetEpisodePreview(index); setHoveredEpisode(null)"
+          @touchstart="startEpisodePreview(index); setHoveredEpisode(index)"
+          @touchend="resetEpisodePreview(index); setHoveredEpisode(null)"
+          @touchcancel="resetEpisodePreview(index); setHoveredEpisode(null)"
           @focus="setHoveredEpisode(index)"
           @blur="setHoveredEpisode(null)"
         >
