@@ -1,0 +1,9 @@
+Now for my skillset, we'll start with Python & Django 🧑‍💻
+
+Well, I've started as Java developer for few months but then I've discovered Python & Django.
+
+Then until now, I'm using it to build web applications, mostly RESTful API and also Python for script automations.
+
+I'm really confident in using it and also learning it as it keeps on updating.
+
+I will rate my Python & Django stack as <b>9 out of 10</b> 🫰

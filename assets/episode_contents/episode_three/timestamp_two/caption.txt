@@ -1,0 +1,9 @@
+One of the required tools to be a developer, the Docker!
+
+Sure at first I did not understand anything like I'm looking at a foreign language while reading the syntax of it.
+
+As I get the hang of it, I felt like I've improved myself as a developer and makes it easier to build, test, and deploy applications.
+
+Btw, this tool is the answer to <i>"It works on my machine"</i> problem 😉
+
+I'll rate my docker skill <b>8 out of 10</b>.
