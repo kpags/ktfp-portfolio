@@ -244,6 +244,8 @@ let playbackFeedbackTimer: ReturnType<typeof setTimeout> | undefined
 let captionFitFrame: number | undefined
 let captionFitRequest = 0
 let captionResizeObserver: ResizeObserver | undefined
+let captionFitKey = ''
+let isCaptionFitInProgress = false
 const episodePreviewTransitionTimers: Array<ReturnType<typeof setTimeout> | undefined> = []
 let hasPointerPosition = false
 
@@ -447,17 +449,62 @@ function scheduleCaptionAdvance() {
 }
 
 function setCaptionElement(element: Element | null) {
-  captionElement.value = element instanceof HTMLElement ? element : null
+  const nextCaptionElement = element instanceof HTMLElement ? element : null
+  if (captionElement.value === nextCaptionElement) return
+  captionElement.value = nextCaptionElement
   captionResizeObserver?.disconnect()
   if (captionElement.value?.parentElement) captionResizeObserver?.observe(captionElement.value.parentElement)
   requestCaptionFit()
 }
 
 function requestCaptionFit() {
+  if (isCaptionFitInProgress) return
   captionFitRequest += 1
   if (captionFitFrame) window.cancelAnimationFrame(captionFitFrame)
   const request = captionFitRequest
   captionFitFrame = window.requestAnimationFrame(() => { void fitCaption(request) })
+}
+
+function getCaptionAvailableHeight(caption: HTMLElement) {
+  const container = caption.parentElement
+  const count = container?.querySelector<HTMLElement>('.episode-caption__count')
+  if (!container || !count) return 0
+
+  const containerStyles = window.getComputedStyle(container)
+  return container.clientHeight
+    - Number.parseFloat(containerStyles.paddingTop)
+    - Number.parseFloat(containerStyles.paddingBottom)
+    - count.offsetHeight
+    - Number.parseFloat(window.getComputedStyle(count).marginBottom)
+}
+
+function getCaptionFitKey(caption: HTMLElement, availableHeight: number) {
+  const { width, height } = caption.getBoundingClientRect()
+  return [activeCaption.value?.html, Math.round(width), Math.round(height), Math.round(availableHeight), window.matchMedia('(max-width: 560px)').matches].join('|')
+}
+
+function measureCaptionFontSize(caption: HTMLElement, availableHeight: number, minimumSize: number) {
+  const sourceContainer = caption.parentElement
+  if (!sourceContainer) return null
+
+  const measureContainer = sourceContainer.cloneNode(false) as HTMLElement
+  const measureCaption = caption.cloneNode(true) as HTMLElement
+  measureContainer.style.cssText = `position:fixed;left:-10000px;top:0;visibility:hidden;pointer-events:none;display:block;width:${caption.getBoundingClientRect().width}px;height:auto;min-height:0;padding:0;overflow:visible;`
+  measureCaption.style.maxHeight = 'none'
+  measureCaption.style.overflow = 'visible'
+  measureCaption.style.fontSize = ''
+  measureContainer.appendChild(measureCaption)
+  document.body.appendChild(measureContainer)
+
+  let fontSize = Number.parseFloat(window.getComputedStyle(measureCaption).fontSize)
+  while (measureCaption.scrollHeight > availableHeight && fontSize > minimumSize) {
+    fontSize = Math.max(minimumSize, fontSize - .5)
+    measureCaption.style.fontSize = `${fontSize}px`
+  }
+
+  const fits = measureCaption.scrollHeight <= availableHeight
+  measureContainer.remove()
+  return { fontSize, fits }
 }
 
 async function fitCaption(request: number) {
@@ -465,37 +512,37 @@ async function fitCaption(request: number) {
   if (request !== captionFitRequest || !captionElement.value || !activeCaption.value) return
 
   const caption = captionElement.value
-  const container = caption.parentElement
-  const count = container?.querySelector<HTMLElement>('.episode-caption__count')
-  if (!container || !count) return
+  const availableHeight = getCaptionAvailableHeight(caption)
+  if (availableHeight <= 0) return
+  const fitKey = getCaptionFitKey(caption, availableHeight)
+  if (fitKey === captionFitKey) return
 
-  captionFontSize.value = null
-  await nextTick()
-  if (request !== captionFitRequest) return
-
-  const containerStyles = window.getComputedStyle(container)
-  const availableHeight = container.clientHeight
-    - Number.parseFloat(containerStyles.paddingTop)
-    - Number.parseFloat(containerStyles.paddingBottom)
-    - count.offsetHeight
-    - Number.parseFloat(window.getComputedStyle(count).marginBottom)
+  isCaptionFitInProgress = true
   const minimumSize = window.matchMedia('(max-width: 560px)').matches ? 16 : 18.4
-  let fontSize = Number.parseFloat(window.getComputedStyle(caption).fontSize)
+  const result = measureCaptionFontSize(caption, availableHeight, minimumSize)
+  if (!result) {
+    isCaptionFitInProgress = false
+    return
+  }
+  let needsRefit = false
 
-  while (caption.scrollHeight > availableHeight && fontSize > minimumSize) {
-    fontSize = Math.max(minimumSize, fontSize - .5)
-    captionFontSize.value = `${fontSize}px`
-    await nextTick()
-    if (request !== captionFitRequest) return
+  if (result.fits) {
+    captionFontSize.value = `${result.fontSize}px`
+    captionFitKey = fitKey
+  } else if (!activeCaption.value.isOverflowSplit) {
+    const splitSegments = splitCaptionForFit(activeCaption.value.html)
+    if (splitSegments.length > 1) {
+      activeTimestamp.value?.captionSegments.splice(activeCaptionIndex.value, 1, ...splitSegments)
+      captionFitKey = ''
+      needsRefit = true
+    }
+  } else {
+    captionFontSize.value = `${minimumSize}px`
+    captionFitKey = fitKey
   }
 
-  if (caption.scrollHeight <= availableHeight || activeCaption.value.isOverflowSplit) return
-
-  const splitSegments = splitCaptionForFit(activeCaption.value.html)
-  if (splitSegments.length < 2) return
-  activeTimestamp.value?.captionSegments.splice(activeCaptionIndex.value, 1, ...splitSegments)
-  captionFontSize.value = null
-  requestCaptionFit()
+  isCaptionFitInProgress = false
+  if (request !== captionFitRequest || needsRefit) requestCaptionFit()
 }
 
 function setActiveMediaVideo(element: Element | null) {
