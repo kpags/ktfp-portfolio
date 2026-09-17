@@ -203,6 +203,9 @@ function getEpisodeTimestamps(episodeFolder: string): EpisodeTimestamp[] {
 
 const episodeTimestampSequences = reactive(episodeFolderNames.map(getEpisodeTimestamps))
 
+type PortfolioPage = 'home' | 'library' | 'episode'
+type PortfolioHistoryState = { portfolioPage?: PortfolioPage; episodeIndex?: number }
+
 const isLibraryOpen = ref(false)
 const isPlayerOpen = ref(false)
 const activeEpisode = ref(0)
@@ -246,6 +249,7 @@ let captionFitRequest = 0
 let captionResizeObserver: ResizeObserver | undefined
 let captionFitKey = ''
 let isCaptionFitInProgress = false
+let historyNavigationToken = 0
 const episodePreviewTransitionTimers: Array<ReturnType<typeof setTimeout> | undefined> = []
 let hasPointerPosition = false
 
@@ -321,6 +325,57 @@ function activateEpisode(index: number, openPlayer = false) {
   if (openPlayer) isPlayerOpen.value = true
 }
 
+function getPortfolioPageFromLocation(): PortfolioHistoryState {
+  const state = window.history.state as PortfolioHistoryState | null
+  if (state?.portfolioPage) return state
+
+  const match = window.location.hash.match(/^#\/episode\/(\d+)$/)
+  if (match) return { portfolioPage: 'episode', episodeIndex: Number(match[1]) - 1 }
+  return window.location.hash === '#/episodes' ? { portfolioPage: 'library' } : { portfolioPage: 'home' }
+}
+
+function getPortfolioPath(page: PortfolioPage, episodeIndex = activeEpisode.value) {
+  if (page === 'episode') return `#/episode/${episodeIndex + 1}`
+  return page === 'library' ? '#/episodes' : '#/'
+}
+
+function applyPortfolioPage(state: PortfolioHistoryState) {
+  const page = state.portfolioPage ?? 'home'
+  const episodeIndex = Number.isInteger(state.episodeIndex) && state.episodeIndex! >= 0 && state.episodeIndex! < episodes.length
+    ? state.episodeIndex!
+    : activeEpisode.value
+
+  isLibraryOpen.value = page !== 'home'
+  isPlayerOpen.value = page === 'episode'
+  if (page === 'episode') activateEpisode(episodeIndex, true)
+}
+
+function writePortfolioHistory(page: PortfolioPage, episodeIndex = activeEpisode.value, replace = false) {
+  const state: PortfolioHistoryState = { portfolioPage: page, ...(page === 'episode' ? { episodeIndex } : {}) }
+  const method = replace ? 'replaceState' : 'pushState'
+  window.history[method](state, '', getPortfolioPath(page, episodeIndex))
+}
+
+function navigatePortfolio(page: PortfolioPage, episodeIndex = activeEpisode.value) {
+  applyPortfolioPage({ portfolioPage: page, episodeIndex })
+  writePortfolioHistory(page, episodeIndex)
+}
+
+async function restorePortfolioPage(state: PortfolioHistoryState) {
+  const page = state.portfolioPage ?? 'home'
+  const episodeIndex = Number.isInteger(state.episodeIndex) && state.episodeIndex! >= 0 && state.episodeIndex! < episodes.length
+    ? state.episodeIndex!
+    : activeEpisode.value
+  const token = ++historyNavigationToken
+  if (page === 'episode') await prepareEpisodeContents(episodeIndex)
+  if (token !== historyNavigationToken) return
+  applyPortfolioPage({ portfolioPage: page, episodeIndex })
+}
+
+function handleBrowserNavigation() {
+  void restorePortfolioPage(getPortfolioPageFromLocation())
+}
+
 function preloadMedia(url: string, type: 'image' | 'video') {
   return new Promise<void>((resolve) => {
     if (type === 'image') {
@@ -368,17 +423,17 @@ async function prepareEpisodeContents(index: number) {
 }
 
 function openLibrary(event: MouseEvent) {
-  beginTransition(event, () => { isLibraryOpen.value = true })
+  beginTransition(event, () => { navigatePortfolio('library') })
 }
 
 async function openEpisodePlayer(event: MouseEvent, index: number) {
   if (isTransitioning.value || isEpisodeLoading.value) return
   await prepareEpisodeContents(index)
-  beginTransition(event, () => { activateEpisode(index, true) })
+  beginTransition(event, () => { navigatePortfolio('episode', index) })
 }
 
 function closePlayer(event: MouseEvent) {
-  beginTransition(event, () => { isPlayerOpen.value = false })
+  beginTransition(event, () => { navigatePortfolio('library') })
 }
 
 function setHoveredEpisode(index: number | null) {
@@ -389,7 +444,7 @@ async function changeEpisode(event: MouseEvent, direction: -1 | 1) {
   const nextIndex = activeEpisode.value + direction
   if (nextIndex < 0 || nextIndex >= episodes.length || isTransitioning.value || isEpisodeLoading.value) return
   await prepareEpisodeContents(nextIndex)
-  beginDirectionalTransition(direction === -1 ? 'previous' : 'next', () => { activateEpisode(nextIndex) })
+  beginDirectionalTransition(direction === -1 ? 'previous' : 'next', () => { navigatePortfolio('episode', nextIndex) })
 }
 
 function skipPlayback(seconds: number) {
@@ -629,7 +684,11 @@ function setThumbnailFrame(index: number) {
 }
 
 function closeLibrary(event: MouseEvent) {
-  beginTransition(event, () => { isLibraryOpen.value = false })
+  beginTransition(event, () => { navigatePortfolio('home') })
+}
+
+function goHome() {
+  navigatePortfolio('home')
 }
 
 function moveCursor(event: MouseEvent) {
@@ -671,6 +730,10 @@ onMounted(() => {
   captionResizeObserver = new ResizeObserver(requestCaptionFit)
   window.addEventListener('resize', requestCaptionFit)
   document.fonts?.ready.then(requestCaptionFit)
+  const initialPage = getPortfolioPageFromLocation()
+  writePortfolioHistory(initialPage.portfolioPage ?? 'home', initialPage.episodeIndex, true)
+  void restorePortfolioPage(initialPage)
+  window.addEventListener('popstate', handleBrowserNavigation)
 })
 
 watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeCaptionIndex], scheduleCaptionAdvance)
@@ -689,6 +752,7 @@ onBeforeUnmount(() => {
   if (captionFitFrame) window.cancelAnimationFrame(captionFitFrame)
   captionResizeObserver?.disconnect()
   window.removeEventListener('resize', requestCaptionFit)
+  window.removeEventListener('popstate', handleBrowserNavigation)
   episodePreviewTransitionTimers.forEach(timer => { if (timer) clearTimeout(timer) })
 })
 </script>
@@ -711,7 +775,7 @@ onBeforeUnmount(() => {
     <div v-if="rippleDirection" :class="['episode-ripple', `episode-ripple--${rippleDirection}`]" aria-hidden="true"><span></span><span></span></div>
     <section v-if="!isLibraryOpen" :class="['hero', { 'hero--leaving': transitionPhase === 'leaving' }]" aria-labelledby="hero-title">
       <nav class="nav">
-        <button class="brand" aria-label="Kurt Paguio home" @click="isLibraryOpen = false">KURT<span>PAGUIO</span></button>
+        <button class="brand" aria-label="Kurt Paguio home" @click="goHome">KURT<span>PAGUIO</span></button>
         <button class="menu-button" aria-label="Open episode selector" @click="openLibrary"><i></i><i></i></button>
       </nav>
 
@@ -785,13 +849,12 @@ onBeforeUnmount(() => {
         <span class="detail-pulse"></span>
         <p>SELECTED EPISODE</p>
         <strong>EP. {{ displayedEpisode.number }} — {{ displayedEpisode.title }}</strong>
-        <span>Content placeholder · Coming soon</span>
       </div>
     </section>
 
     <section v-if="isPlayerOpen" :class="['player-page', { 'player-page--leaving': transitionPhase === 'leaving' }]" aria-labelledby="player-title">
       <nav class="nav">
-        <button class="brand" aria-label="Back to home" @click="isPlayerOpen = false; isLibraryOpen = false">KURT<span>PAGUIO</span></button>
+        <button class="brand" aria-label="Back to home" @click="goHome">KURT<span>PAGUIO</span></button>
         <button class="back-button" @click="closePlayer">← Episodes</button>
       </nav>
 
