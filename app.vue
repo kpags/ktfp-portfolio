@@ -57,7 +57,7 @@ const episodeClipSequences = episodeFolderNames.map(folder =>
     .map(([, url]) => url),
 )
 
-type CaptionSegment = { html: string }
+type CaptionSegment = { html: string; isOverflowSplit?: boolean }
 type EpisodeTimestamp = {
   folder: string
   captionSegments: CaptionSegment[]
@@ -108,6 +108,57 @@ function splitCaption(caption: string) {
     .map(segment => ({ html: sanitizeCaptionHtml(segment) }))
 }
 
+function splitCaptionForFit(html: string) {
+  const maximumCharacters = 120
+  const tagPattern = /<\/?([a-z][a-z0-9-]*)>/gi
+  const segments: CaptionSegment[] = []
+  const activeTags: string[] = []
+  let current = ''
+  let visibleCharacters = 0
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  const finishSegment = () => {
+    const closedTags = [...activeTags].reverse().map(tag => `</${tag}>`).join('')
+    if (current.trim()) segments.push({ html: `${current}${closedTags}`, isOverflowSplit: true })
+    current = activeTags.map(tag => `<${tag}>`).join('')
+    visibleCharacters = 0
+  }
+
+  const appendText = (text: string) => {
+    const words = text.match(/\S+\s*|\s+/g) ?? []
+    words.forEach(word => {
+      const wordLength = word.replace(/\s/g, '').length
+      if (visibleCharacters && visibleCharacters + wordLength > maximumCharacters) finishSegment()
+      current += word
+      visibleCharacters += wordLength
+    })
+  }
+
+  while ((match = tagPattern.exec(html))) {
+    appendText(html.slice(lastIndex, match.index))
+    const tag = match[1].toLowerCase()
+    const isClosingTag = match[0].startsWith('</')
+
+    if (tag === 'br') {
+      current += '<br>'
+      visibleCharacters += 1
+    } else if (isClosingTag) {
+      current += match[0]
+      const tagIndex = activeTags.lastIndexOf(tag)
+      if (tagIndex !== -1) activeTags.splice(tagIndex, 1)
+    } else {
+      current += match[0]
+      activeTags.push(tag)
+    }
+    lastIndex = tagPattern.lastIndex
+  }
+
+  appendText(html.slice(lastIndex))
+  finishSegment()
+  return segments
+}
+
 const sequenceNameOrder = [
   'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
   'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
@@ -150,7 +201,7 @@ function getEpisodeTimestamps(episodeFolder: string): EpisodeTimestamp[] {
     .filter((timestamp): timestamp is EpisodeTimestamp => timestamp !== null)
 }
 
-const episodeTimestampSequences = episodeFolderNames.map(getEpisodeTimestamps)
+const episodeTimestampSequences = reactive(episodeFolderNames.map(getEpisodeTimestamps))
 
 const isLibraryOpen = ref(false)
 const isPlayerOpen = ref(false)
@@ -162,6 +213,8 @@ const activeTimestampIndex = ref(0)
 const activeCaptionIndex = ref(0)
 const activeMediaIndex = ref(0)
 const activeMediaVideo = ref<HTMLVideoElement | null>(null)
+const captionElement = ref<HTMLElement | null>(null)
+const captionFontSize = ref<string | null>(null)
 const playbackFeedback = ref<'play' | 'pause' | 'previous' | 'next' | null>(null)
 const playbackFeedbackKey = ref(0)
 const activeHomeImageGroup = ref(0)
@@ -188,6 +241,9 @@ let homeImageTimer: ReturnType<typeof setInterval> | undefined
 let captionAdvanceTimer: ReturnType<typeof setTimeout> | undefined
 let mediaAdvanceTimer: ReturnType<typeof setTimeout> | undefined
 let playbackFeedbackTimer: ReturnType<typeof setTimeout> | undefined
+let captionFitFrame: number | undefined
+let captionFitRequest = 0
+let captionResizeObserver: ResizeObserver | undefined
 const episodePreviewTransitionTimers: Array<ReturnType<typeof setTimeout> | undefined> = []
 let hasPointerPosition = false
 
@@ -390,6 +446,58 @@ function scheduleCaptionAdvance() {
   }, captionSegmentDuration * 1000)
 }
 
+function setCaptionElement(element: Element | null) {
+  captionElement.value = element instanceof HTMLElement ? element : null
+  captionResizeObserver?.disconnect()
+  if (captionElement.value?.parentElement) captionResizeObserver?.observe(captionElement.value.parentElement)
+  requestCaptionFit()
+}
+
+function requestCaptionFit() {
+  captionFitRequest += 1
+  if (captionFitFrame) window.cancelAnimationFrame(captionFitFrame)
+  const request = captionFitRequest
+  captionFitFrame = window.requestAnimationFrame(() => { void fitCaption(request) })
+}
+
+async function fitCaption(request: number) {
+  await nextTick()
+  if (request !== captionFitRequest || !captionElement.value || !activeCaption.value) return
+
+  const caption = captionElement.value
+  const container = caption.parentElement
+  const count = container?.querySelector<HTMLElement>('.episode-caption__count')
+  if (!container || !count) return
+
+  captionFontSize.value = null
+  await nextTick()
+  if (request !== captionFitRequest) return
+
+  const containerStyles = window.getComputedStyle(container)
+  const availableHeight = container.clientHeight
+    - Number.parseFloat(containerStyles.paddingTop)
+    - Number.parseFloat(containerStyles.paddingBottom)
+    - count.offsetHeight
+    - Number.parseFloat(window.getComputedStyle(count).marginBottom)
+  const minimumSize = window.matchMedia('(max-width: 560px)').matches ? 16 : 18.4
+  let fontSize = Number.parseFloat(window.getComputedStyle(caption).fontSize)
+
+  while (caption.scrollHeight > availableHeight && fontSize > minimumSize) {
+    fontSize = Math.max(minimumSize, fontSize - .5)
+    captionFontSize.value = `${fontSize}px`
+    await nextTick()
+    if (request !== captionFitRequest) return
+  }
+
+  if (caption.scrollHeight <= availableHeight || activeCaption.value.isOverflowSplit) return
+
+  const splitSegments = splitCaptionForFit(activeCaption.value.html)
+  if (splitSegments.length < 2) return
+  activeTimestamp.value?.captionSegments.splice(activeCaptionIndex.value, 1, ...splitSegments)
+  captionFontSize.value = null
+  requestCaptionFit()
+}
+
 function setActiveMediaVideo(element: Element | null) {
   activeMediaVideo.value = element instanceof HTMLVideoElement ? element : null
 }
@@ -513,9 +621,13 @@ onMounted(() => {
       activeHomeImageGroup.value = (activeHomeImageGroup.value + 1) % homeImageGroups.length
     }, 5000)
   }
+  captionResizeObserver = new ResizeObserver(requestCaptionFit)
+  window.addEventListener('resize', requestCaptionFit)
+  document.fonts?.ready.then(requestCaptionFit)
 })
 
 watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeCaptionIndex], scheduleCaptionAdvance)
+watch([isPlayerOpen, activeEpisode, activeTimestampIndex, activeCaptionIndex], requestCaptionFit)
 watch([isPlayerOpen, activeEpisode, activeTimestampIndex], () => { activeMediaIndex.value = 0 })
 watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeMediaIndex], scheduleMediaAdvance)
 watch([isPlaybackActive, activeMedia], () => { nextTick(syncActiveMediaPlayback) })
@@ -527,6 +639,9 @@ onBeforeUnmount(() => {
   if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer)
   if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer)
   if (playbackFeedbackTimer) clearTimeout(playbackFeedbackTimer)
+  if (captionFitFrame) window.cancelAnimationFrame(captionFitFrame)
+  captionResizeObserver?.disconnect()
+  window.removeEventListener('resize', requestCaptionFit)
   episodePreviewTransitionTimers.forEach(timer => { if (timer) clearTimeout(timer) })
 })
 </script>
@@ -652,7 +767,7 @@ onBeforeUnmount(() => {
             <div class="episode-content-grid">
               <div class="episode-caption" aria-live="polite">
                 <span class="episode-caption__count">{{ String(activeCaptionIndex + 1).padStart(2, '0') }} / {{ String(activeTimestamp.captionSegments.length).padStart(2, '0') }}</span>
-                <p v-if="activeCaption" v-html="activeCaption.html"></p>
+                <p v-if="activeCaption" :ref="setCaptionElement" :style="captionFontSize ? { fontSize: captionFontSize } : undefined" v-html="activeCaption.html"></p>
               </div>
               <div class="episode-media">
                 <Transition name="episode-media" mode="out-in">

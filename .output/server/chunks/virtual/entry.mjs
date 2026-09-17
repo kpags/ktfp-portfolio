@@ -1364,6 +1364,53 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		function splitCaption(caption) {
 			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)).map((segment) => segment.trim()).filter(Boolean).map((segment) => ({ html: sanitizeCaptionHtml(segment) }));
 		}
+		function splitCaptionForFit(html) {
+			const maximumCharacters = 120;
+			const tagPattern = /<\/?([a-z][a-z0-9-]*)>/gi;
+			const segments = [];
+			const activeTags = [];
+			let current = "";
+			let visibleCharacters = 0;
+			let lastIndex = 0;
+			let match;
+			const finishSegment = () => {
+				const closedTags = [...activeTags].reverse().map((tag) => `</${tag}>`).join("");
+				if (current.trim()) segments.push({
+					html: `${current}${closedTags}`,
+					isOverflowSplit: true
+				});
+				current = activeTags.map((tag) => `<${tag}>`).join("");
+				visibleCharacters = 0;
+			};
+			const appendText = (text) => {
+				(text.match(/\S+\s*|\s+/g) ?? []).forEach((word) => {
+					const wordLength = word.replace(/\s/g, "").length;
+					if (visibleCharacters && visibleCharacters + wordLength > maximumCharacters) finishSegment();
+					current += word;
+					visibleCharacters += wordLength;
+				});
+			};
+			while (match = tagPattern.exec(html)) {
+				appendText(html.slice(lastIndex, match.index));
+				const tag = match[1].toLowerCase();
+				const isClosingTag = match[0].startsWith("</");
+				if (tag === "br") {
+					current += "<br>";
+					visibleCharacters += 1;
+				} else if (isClosingTag) {
+					current += match[0];
+					const tagIndex = activeTags.lastIndexOf(tag);
+					if (tagIndex !== -1) activeTags.splice(tagIndex, 1);
+				} else {
+					current += match[0];
+					activeTags.push(tag);
+				}
+				lastIndex = tagPattern.lastIndex;
+			}
+			appendText(html.slice(lastIndex));
+			finishSegment();
+			return segments;
+		}
 		const sequenceNameOrder = [
 			"one",
 			"two",
@@ -1415,7 +1462,7 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 				} : null;
 			}).filter((timestamp) => timestamp !== null);
 		}
-		const episodeTimestampSequences = episodeFolderNames.map(getEpisodeTimestamps);
+		const episodeTimestampSequences = reactive(episodeFolderNames.map(getEpisodeTimestamps));
 		const isLibraryOpen = ref(false);
 		const isPlayerOpen = ref(false);
 		const activeEpisode = ref(0);
@@ -1426,6 +1473,8 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		const activeCaptionIndex = ref(0);
 		const activeMediaIndex = ref(0);
 		const activeMediaVideo = ref(null);
+		const captionElement = ref(null);
+		const captionFontSize = ref(null);
 		const playbackFeedback = ref(null);
 		ref(0);
 		const activeHomeImageGroup = ref(0);
@@ -1452,6 +1501,8 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		ref(null);
 		let captionAdvanceTimer;
 		let mediaAdvanceTimer;
+		let captionFitFrame;
+		let captionFitRequest = 0;
 		const episodes = [
 			{
 				number: "01",
@@ -1538,6 +1589,41 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 				if (nextPosition >= playbackDuration.value) isPlaybackActive.value = false;
 			}, captionSegmentDuration * 1e3);
 		}
+		function requestCaptionFit() {
+			captionFitRequest += 1;
+			if (captionFitFrame) (void 0).cancelAnimationFrame(captionFitFrame);
+			const request = captionFitRequest;
+			captionFitFrame = (void 0).requestAnimationFrame(() => {
+				fitCaption(request);
+			});
+		}
+		async function fitCaption(request) {
+			await nextTick();
+			if (request !== captionFitRequest || !captionElement.value || !activeCaption.value) return;
+			const caption = captionElement.value;
+			const container = caption.parentElement;
+			const count = container?.querySelector(".episode-caption__count");
+			if (!container || !count) return;
+			captionFontSize.value = null;
+			await nextTick();
+			if (request !== captionFitRequest) return;
+			const containerStyles = (void 0).getComputedStyle(container);
+			const availableHeight = container.clientHeight - Number.parseFloat(containerStyles.paddingTop) - Number.parseFloat(containerStyles.paddingBottom) - count.offsetHeight - Number.parseFloat((void 0).getComputedStyle(count).marginBottom);
+			const minimumSize = (void 0).matchMedia("(max-width: 560px)").matches ? 16 : 18.4;
+			let fontSize = Number.parseFloat((void 0).getComputedStyle(caption).fontSize);
+			while (caption.scrollHeight > availableHeight && fontSize > minimumSize) {
+				fontSize = Math.max(minimumSize, fontSize - .5);
+				captionFontSize.value = `${fontSize}px`;
+				await nextTick();
+				if (request !== captionFitRequest) return;
+			}
+			if (caption.scrollHeight <= availableHeight || activeCaption.value.isOverflowSplit) return;
+			const splitSegments = splitCaptionForFit(activeCaption.value.html);
+			if (splitSegments.length < 2) return;
+			activeTimestamp.value?.captionSegments.splice(activeCaptionIndex.value, 1, ...splitSegments);
+			captionFontSize.value = null;
+			requestCaptionFit();
+		}
 		function syncActiveMediaPlayback() {
 			const video = activeMediaVideo.value;
 			if (!video) return;
@@ -1551,6 +1637,12 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			activeTimestampIndex,
 			activeCaptionIndex
 		], scheduleCaptionAdvance);
+		watch([
+			isPlayerOpen,
+			activeEpisode,
+			activeTimestampIndex,
+			activeCaptionIndex
+		], requestCaptionFit);
 		watch([
 			isPlayerOpen,
 			activeEpisode,
@@ -1661,7 +1753,7 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 						_push(`<button class="${ssrRenderClass(["timestamp-button", { "timestamp-button--active": unref(activeTimestampIndex) === index }])}"${ssrRenderAttr("aria-label", `Show timestamp ${index + 1}`)}${ssrRenderAttr("aria-pressed", unref(activeTimestampIndex) === index)}>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</button>`);
 					});
 					_push(`<!--]--></div><div class="episode-content-grid"><div class="episode-caption" aria-live="polite"><span class="episode-caption__count">${ssrInterpolate(String(unref(activeCaptionIndex) + 1).padStart(2, "0"))} / ${ssrInterpolate(String(unref(activeTimestamp).captionSegments.length).padStart(2, "0"))}</span>`);
-					if (unref(activeCaption)) _push(`<p>${unref(activeCaption).html ?? ""}</p>`);
+					if (unref(activeCaption)) _push(`<p style="${ssrRenderStyle(unref(captionFontSize) ? { fontSize: unref(captionFontSize) } : void 0)}">${unref(activeCaption).html ?? ""}</p>`);
 					else _push(`<!---->`);
 					_push(`</div><div class="episode-media">`);
 					if (unref(activeMedia)) {
