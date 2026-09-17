@@ -57,27 +57,45 @@ const episodeClipSequences = episodeFolderNames.map(folder =>
     .map(([, url]) => url),
 )
 
-type CaptionPart = { text: string; italic: boolean }
+type CaptionSegment = { html: string }
 type EpisodeTimestamp = {
   folder: string
-  captionSegments: Array<{ parts: CaptionPart[] }>
+  captionSegments: CaptionSegment[]
   media: Array<{ url: string; type: 'image' | 'video' }>
 }
 
-function getCaptionParts(segment: string): CaptionPart[] {
-  const parts: CaptionPart[] = []
-  const italicPattern = /<i>([\s\S]*?)<\/i>/gi
+const supportedCaptionTags = new Set([
+  'b', 'strong', 'i', 'em', 'u', 's', 'del', 'mark', 'small', 'sub', 'sup', 'code', 'kbd', 'br',
+])
+
+function escapeCaptionText(text: string) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+function sanitizeCaptionHtml(segment: string) {
+  const tagPattern = /<\/?([a-z][a-z0-9-]*)(?:\s[^<>]*)?\s*\/?\s*>/gi
+  let sanitized = ''
   let lastIndex = 0
   let match: RegExpExecArray | null
 
-  while ((match = italicPattern.exec(segment))) {
-    if (match.index > lastIndex) parts.push({ text: segment.slice(lastIndex, match.index), italic: false })
-    parts.push({ text: match[1], italic: true })
-    lastIndex = italicPattern.lastIndex
+  while ((match = tagPattern.exec(segment))) {
+    sanitized += escapeCaptionText(segment.slice(lastIndex, match.index))
+    const tagName = match[1].toLowerCase()
+    const isClosingTag = match[0].startsWith('</')
+
+    if (supportedCaptionTags.has(tagName)) {
+      sanitized += tagName === 'br' ? '<br>' : isClosingTag ? `</${tagName}>` : `<${tagName}>`
+    } else {
+      sanitized += escapeCaptionText(match[0])
+    }
+
+    lastIndex = tagPattern.lastIndex
   }
 
-  if (lastIndex < segment.length) parts.push({ text: segment.slice(lastIndex), italic: false })
-  return parts.length ? parts : [{ text: segment, italic: false }]
+  return sanitized + escapeCaptionText(segment.slice(lastIndex))
 }
 
 function splitCaption(caption: string) {
@@ -87,7 +105,7 @@ function splitCaption(caption: string) {
     .flatMap(line => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/))
     .map(segment => segment.trim())
     .filter(Boolean)
-    .map(segment => ({ parts: getCaptionParts(segment) }))
+    .map(segment => ({ html: sanitizeCaptionHtml(segment) }))
 }
 
 const sequenceNameOrder = [
@@ -143,6 +161,9 @@ const playbackPosition = ref(0)
 const activeTimestampIndex = ref(0)
 const activeCaptionIndex = ref(0)
 const activeMediaIndex = ref(0)
+const activeMediaVideo = ref<HTMLVideoElement | null>(null)
+const playbackFeedback = ref<'play' | 'pause' | 'previous' | 'next' | null>(null)
+const playbackFeedbackKey = ref(0)
 const activeHomeImageGroup = ref(0)
 const isTransitioning = ref(false)
 const isEpisodeLoading = ref(false)
@@ -166,6 +187,7 @@ let trailAnimationFrame: number | undefined
 let homeImageTimer: ReturnType<typeof setInterval> | undefined
 let captionAdvanceTimer: ReturnType<typeof setTimeout> | undefined
 let mediaAdvanceTimer: ReturnType<typeof setTimeout> | undefined
+let playbackFeedbackTimer: ReturnType<typeof setTimeout> | undefined
 const episodePreviewTransitionTimers: Array<ReturnType<typeof setTimeout> | undefined> = []
 let hasPointerPosition = false
 
@@ -183,7 +205,7 @@ const activeEpisodeTimestamps = computed(() => episodeTimestampSequences[activeE
 const activeTimestamp = computed(() => activeEpisodeTimestamps.value[activeTimestampIndex.value])
 const activeCaption = computed(() => activeTimestamp.value?.captionSegments[activeCaptionIndex.value])
 const activeMedia = computed(() => activeTimestamp.value?.media[activeMediaIndex.value])
-const captionSegmentDuration = 4.5
+const captionSegmentDuration = 5
 const timestampStartPositions = computed(() => {
   let position = 0
   return activeEpisodeTimestamps.value.map(timestamp => {
@@ -314,6 +336,7 @@ async function changeEpisode(event: MouseEvent, direction: -1 | 1) {
 
 function skipPlayback(seconds: number) {
   seekPlayback(playbackPosition.value + seconds)
+  showPlaybackFeedback(seconds < 0 ? 'previous' : 'next')
 }
 
 function selectTimestamp(index: number) {
@@ -364,7 +387,33 @@ function scheduleCaptionAdvance() {
     const nextPosition = playbackPosition.value + captionSegmentDuration
     seekPlayback(nextPosition)
     if (nextPosition >= playbackDuration.value) isPlaybackActive.value = false
-  }, 4500)
+  }, captionSegmentDuration * 1000)
+}
+
+function setActiveMediaVideo(element: Element | null) {
+  activeMediaVideo.value = element instanceof HTMLVideoElement ? element : null
+}
+
+function syncActiveMediaPlayback() {
+  const video = activeMediaVideo.value
+  if (!video) return
+  if (isPlaybackActive.value) {
+    video.play().catch(() => undefined)
+  } else {
+    video.pause()
+  }
+}
+
+function showPlaybackFeedback(feedback: NonNullable<typeof playbackFeedback.value>) {
+  playbackFeedback.value = feedback
+  playbackFeedbackKey.value += 1
+  if (playbackFeedbackTimer) clearTimeout(playbackFeedbackTimer)
+  playbackFeedbackTimer = window.setTimeout(() => { playbackFeedback.value = null }, 500)
+}
+
+function togglePlayback() {
+  isPlaybackActive.value = !isPlaybackActive.value
+  showPlaybackFeedback(isPlaybackActive.value ? 'play' : 'pause')
 }
 
 function setEpisodeVideo(index: number, element: Element | null) {
@@ -469,6 +518,7 @@ onMounted(() => {
 watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeCaptionIndex], scheduleCaptionAdvance)
 watch([isPlayerOpen, activeEpisode, activeTimestampIndex], () => { activeMediaIndex.value = 0 })
 watch([isPlayerOpen, activeEpisode, isPlaybackActive, activeTimestampIndex, activeMediaIndex], scheduleMediaAdvance)
+watch([isPlaybackActive, activeMedia], () => { nextTick(syncActiveMediaPlayback) })
 
 onBeforeUnmount(() => {
   if (cursorStopTimer) clearTimeout(cursorStopTimer)
@@ -476,6 +526,7 @@ onBeforeUnmount(() => {
   if (homeImageTimer) clearInterval(homeImageTimer)
   if (captionAdvanceTimer) clearTimeout(captionAdvanceTimer)
   if (mediaAdvanceTimer) clearTimeout(mediaAdvanceTimer)
+  if (playbackFeedbackTimer) clearTimeout(playbackFeedbackTimer)
   episodePreviewTransitionTimers.forEach(timer => { if (timer) clearTimeout(timer) })
 })
 </script>
@@ -587,6 +638,7 @@ onBeforeUnmount(() => {
         <div class="video-player" role="region" :aria-label="`Episode ${playerEpisode.number} video player`">
           <div v-if="activeEpisodeTimestamps.length && activeTimestamp" class="episode-content-stage">
             <h1 id="player-title" class="sr-only">{{ playerEpisode.title }}</h1>
+            <div v-if="playbackFeedback" :key="playbackFeedbackKey" :class="['playback-feedback', { 'playback-feedback--left': playbackFeedback === 'previous', 'playback-feedback--right': playbackFeedback === 'next' }]" aria-hidden="true"><span v-if="playbackFeedback === 'previous' || playbackFeedback === 'next'">5 seconds</span><template v-else>{{ playbackFeedback === 'pause' ? '❚❚' : '▶' }}</template></div>
             <div class="timestamp-rail" :style="{ '--timestamp-count': activeEpisodeTimestamps.length }" :aria-label="`${playerEpisode.title} timestamps`">
               <button
                 v-for="(timestamp, index) in activeEpisodeTimestamps"
@@ -600,14 +652,12 @@ onBeforeUnmount(() => {
             <div class="episode-content-grid">
               <div class="episode-caption" aria-live="polite">
                 <span class="episode-caption__count">{{ String(activeCaptionIndex + 1).padStart(2, '0') }} / {{ String(activeTimestamp.captionSegments.length).padStart(2, '0') }}</span>
-                <p v-if="activeCaption">
-                  <template v-for="(part, index) in activeCaption.parts" :key="index"><i v-if="part.italic">{{ part.text }}</i><template v-else>{{ part.text }}</template></template>
-                </p>
+                <p v-if="activeCaption" v-html="activeCaption.html"></p>
               </div>
               <div class="episode-media">
                 <Transition name="episode-media" mode="out-in">
                   <div v-if="activeMedia" :key="activeMedia.url" class="episode-media__item">
-                    <video v-if="activeMedia.type === 'video'" :src="activeMedia.url" autoplay muted playsinline preload="metadata" :aria-label="`${playerEpisode.title} media`" @ended="advanceTimestampMedia"></video>
+                    <video v-if="activeMedia.type === 'video'" :ref="setActiveMediaVideo" :src="activeMedia.url" :autoplay="isPlaybackActive" muted playsinline preload="metadata" :aria-label="`${playerEpisode.title} media`" @ended="advanceTimestampMedia"></video>
                     <img v-else :src="activeMedia.url" :alt="`${playerEpisode.title} media`" />
                   </div>
                 </Transition>
@@ -625,7 +675,7 @@ onBeforeUnmount(() => {
               <div class="control-group">
                 <button class="player-control" :disabled="activeEpisode === 0" aria-label="Previous episode" title="Previous episode" @click="changeEpisode($event, -1)">⏮</button>
                 <button class="player-control" aria-label="Previous 5 seconds" title="Previous 5 seconds" @click="skipPlayback(-5)">↶</button>
-                <button class="player-control player-control--primary" :aria-label="isPlaybackActive ? 'Pause' : 'Play'" :title="isPlaybackActive ? 'Pause' : 'Play'" @click="isPlaybackActive = !isPlaybackActive">{{ isPlaybackActive ? '❚❚' : '▶' }}</button>
+                <button class="player-control player-control--primary" :aria-label="isPlaybackActive ? 'Pause' : 'Play'" :title="isPlaybackActive ? 'Pause' : 'Play'" @click="togglePlayback">{{ isPlaybackActive ? '❚❚' : '▶' }}</button>
                 <button class="player-control" aria-label="Next 5 seconds" title="Next 5 seconds" @click="skipPlayback(5)">↷</button>
                 <button class="player-control" :disabled="activeEpisode === episodes.length - 1" aria-label="Next episode" title="Next episode" @click="changeEpisode($event, 1)">⏭</button>
               </div>

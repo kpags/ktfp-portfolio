@@ -1,6 +1,6 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};globalThis.__timing__.logStart('Load chunks/virtual/entry');import { defineProdDiagnostics } from 'nostics';
 import { ansiFormatter } from 'nostics/formatters/ansi';
-import { getCurrentScope, ref, watchEffect, getCurrentInstance, onBeforeUnmount, onDeactivated, onActivated, createApp, provide, onErrorCaptured, onServerPrefetch, unref, createVNode, resolveDynamicComponent, shallowReactive, reactive, effectScope, hasInjectionContext, inject, defineAsyncComponent, mergeProps, defineComponent, computed, watch, toRef, h, isReadonly, useSSRContext, isRef, isShallow, isReactive, toRaw } from 'vue';
+import { getCurrentScope, ref, watchEffect, getCurrentInstance, onBeforeUnmount, onDeactivated, onActivated, createApp, provide, onErrorCaptured, onServerPrefetch, unref, createVNode, resolveDynamicComponent, shallowReactive, reactive, effectScope, hasInjectionContext, inject, defineAsyncComponent, mergeProps, defineComponent, computed, watch, nextTick, toRef, h, isReadonly, useSSRContext, isRef, isShallow, isReactive, toRaw } from 'vue';
 import { f as createError, $ as $fetch, m as isEqual, n as stringifyParsedURL, o as stringifyQuery, p as parseQuery, q as hasProtocol, i as joinURL, v as defu, w as withQuery, x as sanitizeStatusCode, y as parseURL, e as encodePath, z as decodePath, A as isScriptProtocol } from '../_/nitro.mjs';
 import { i as injectHead$1, V as VueResolver, h as headSymbol, b as baseURL } from '../routes/renderer.mjs';
 import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode, ssrRenderAttrs, ssrRenderList, ssrRenderStyle, ssrRenderClass, ssrInterpolate, ssrRenderAttr, ssrIncludeBooleanAttr } from 'vue/server-renderer';
@@ -1114,19 +1114,28 @@ var defense_default = "" + __buildAssetsURL("defense.5YxW4nUE.mp4");
 var graduation_default = "" + __buildAssetsURL("graduation.BtfL6Z3m.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/caption.txt?raw
-var caption_default$7 = "Lastly, before ending this 'About Me', I also love to watch series, especially anime.\r\n\r\n<i>Kaizoku-O ni ore wa naru!</i>, a quote from one piece because I love that anime. I recommend watching it 😎\r\n\r\nThat's it about me. Onto the next episode!";
+var caption_default$10 = "Lastly, before ending this 'About Me', I also love to watch series, especially anime.\r\n\r\n<i>Kaizoku-O ni ore wa naru!</i>, a quote from one piece because I love that anime. I recommend watching it 😎\r\n\r\nThat's it about me. Onto the next episode!";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_four/caption.txt?raw
-var caption_default$6 = "Well, about music, I know how to sing but for videoke or comfort room only, not for competition or world class, okay?\r\n\r\nI also play piano when I'm not tapping my keyboard to code.\r\n\r\nI also play guitar but basic chords only. Those barre chords are pain in my butt 😓\r\n\r\nOverall, I love music. I like listening to music to relax and also while coding which reduces my stress especially when the error is just a missing semicolon or colon.";
+var caption_default$9 = "Well, about music, I know how to sing but for videoke or comfort room only, not for competition or world class, okay?\r\n\r\nI also play piano when I'm not tapping my keyboard to code.\r\n\r\nI also play guitar but basic chords only. Those barre chords are pain in my butt 😓\r\n\r\nOverall, I love music. I like listening to music to relax and also while coding which reduces my stress especially when the error is just a missing semicolon or colon.";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_one/caption.txt?raw
-var caption_default$5 = "I grew up curious about how technology works and how greatly it impacts people’s lives around the world. This curiosity led me to pursue a career in the IT industry, where I could continuously learn and explore different areas of technology.\r\n\r\nI have learned that technology is constantly evolving, with new tools, systems, and innovations being developed over time. I want to be part of the people who create and improve these technologies, which is why I always work hard to learn new things and develop my skills.\r\n\r\nAs a developer, I enjoy solving problems and using available resources to make applications as efficient as possible. I also value teamwork because I believe that many applications require collaboration, and working with others provides valuable opportunities to learn.\r\n\r\nI am always open to criticism because I see it as an opportunity to improve. I also believe that mistakes and failures are part of the learning process and are necessary steps toward success.\r\n";
+var caption_default$8 = "I grew up curious about how technology works and how greatly it impacts people’s lives around the world. This curiosity led me to pursue a career in the IT industry, where I could continuously learn and explore different areas of technology.\r\n\r\nI have learned that technology is constantly evolving, with new tools, systems, and innovations being developed over time. I want to be part of the people who create and improve these technologies, which is why I always work hard to learn new things and develop my skills.\r\n\r\nAs a developer, I enjoy solving problems and using available resources to make applications as efficient as possible. I also value teamwork because I believe that many applications require collaboration, and working with others provides valuable opportunities to learn.\r\n\r\nI am always open to criticism because I see it as an opportunity to improve. I also believe that mistakes and failures are part of the learning process and are necessary steps toward success.\r\n";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_three/caption.txt?raw
-var caption_default$4 = "Playing video games is a big part of my life. I cannot live without video games lol\r\n\r\nFor the genre, I mostly play FPS, Survival, Open-world, Zombie or Horror/Thriller, and RPG.\r\n\r\n";
+var caption_default$7 = "Playing video games is a big part of my life. I cannot live without video games lol\r\n\r\nFor the genre, I mostly play FPS, Survival, Open-world, Zombie or Horror/Thriller, and RPG.\r\n\r\n";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/caption.txt?raw
-var caption_default$3 = "Oh, I also love playing sports!\r\n\r\nBadminton, Basketball, Bowling for now but I want to try many 😁\r\n\r\nI was once part of the athletics team before in my school as a hammer thrower. You know, those guys spinning then will throw a chained ball into the air.\r\n";
+var caption_default$6 = "Oh, I also love playing sports!\r\n\r\nBadminton, Basketball, Bowling for now but I want to try many 😁\r\n\r\nI was once part of the athletics team before in my school as a hammer thrower. You know, those guys spinning then will throw a chained ball into the air.\r\n";
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_one/caption.txt?raw
+var caption_default$5 = "Now for my skillset, we'll start with Python & Django 🧑‍💻\r\n\r\nWell, I've started as Java developer for few months but then I've discovered Python & Django.\r\n\r\nThen until now, I'm using it to build web applications, mostly RESTful API and also Python for script automations.\r\n\r\nI'm really confident in using it and also learning it as it keeps on updating.\r\n\r\nI will rate my Python & Django stack as <b>9 out of 10</b> 🫰";
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_three/caption.txt?raw
+var caption_default$4 = "At first, I don't know any frontend frameworks and mostly used HTML, CSS, and JavaScript only.\r\n\r\nThat's why I'm bad at frontend development before 😮‍💨\r\n\r\nBut along the way, I've managed to learned two frameworks: VueJS and ReactJS.\r\n\r\nNot just learned but also improve and become knowledgeable on it where I can do full stack development.\r\n\r\nI'm more on backend side guy but also confident on doing frontend stuff.\r\n\r\nI'll rate my skills on VueJS and ReactJS <b> 7 out of 10</b>. \r\n\r\nStill so much to learn but not bad 😊";
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_two/caption.txt?raw
+var caption_default$3 = "One of the required tools to be a developer, the Docker!\r\n\r\nSure at first I did not understand anything like I'm looking at a foreign language while reading the syntax of it.\r\n\r\nAs I get the hang of it, I felt like I've improved myself as a developer and makes it easier to build, test, and deploy applications.\r\n\r\nBtw, this tool is the answer to <i>\"It works on my machine\"</i> problem 😉\r\n\r\nI'll rate my docker skill <b>8 out of 10</b>.";
 //#endregion
 //#region assets/episode_contents/episode_two/timestamp_one/caption.txt?raw
 var caption_default$2 = "For my education, I've started as Junior High School in University of Santo Tomas - Education High School.\r\n\r\nLots of memories here, like fun memories that I want to go back to if I can.\r\n\r\nThis was the time when I met lots of great friends that I have had contact with until now.\r\n\r\nBtw, I was introduced to HTML and CSS in our computer subject here 🤯";
@@ -1138,34 +1147,55 @@ var caption_default$1 = "Last and the finish line of my education, my college da
 var caption_default = "Next one is my Senior High School days. Same school but just different building...and level of course.\r\n\r\nThis was where I've encountered my first programing language in one of my subjects.\r\n\r\nThe C++. \r\n\r\nAnd gosh, I really sucked on that one.\r\n\r\nI've also encountered difficulties like calculus, physics, and other science stuffs but I still made it out alive 😮‍💨";
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/one.mp4?url
-var one_default$7 = "" + __buildAssetsURL("one.CRuQVMtV.mp4");
+var one_default$9 = "" + __buildAssetsURL("one.CRuQVMtV.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/two.mp4?url
-var two_default$6 = "" + __buildAssetsURL("two.Mn7V23aw.mp4");
+var two_default$9 = "" + __buildAssetsURL("two.Mn7V23aw.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_four/one.mp4?url
-var one_default$6 = "" + __buildAssetsURL("one.gtIPshN-.mp4");
+var one_default$8 = "" + __buildAssetsURL("one.gtIPshN-.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_one/one.mp4?url
-var one_default$5 = "" + __buildAssetsURL("one.BvFbRTzz.mp4");
+var one_default$7 = "" + __buildAssetsURL("one.BvFbRTzz.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_one/two.mp4?url
-var two_default$5 = "" + __buildAssetsURL("two.B8WkncmE.mp4");
+var two_default$8 = "" + __buildAssetsURL("two.B8WkncmE.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_three/one.mp4?url
-var one_default$4 = "" + __buildAssetsURL("one.BK0941ig.mp4");
+var one_default$6 = "" + __buildAssetsURL("one.BK0941ig.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_three/two.mp4?url
-var two_default$4 = "" + __buildAssetsURL("two.DnKeH11Y.mp4");
+var two_default$7 = "" + __buildAssetsURL("two.DnKeH11Y.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/one.jpg?url
-var one_default$3 = "" + __buildAssetsURL("one.H0HufYMz.jpg");
+var one_default$5 = "" + __buildAssetsURL("one.H0HufYMz.jpg");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/three.jpg?url
-var three_default$3 = "" + __buildAssetsURL("three.B0JpNHt1.jpg");
+var three_default$5 = "" + __buildAssetsURL("three.B0JpNHt1.jpg");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_two/two.mp4?url
-var two_default$3 = "" + __buildAssetsURL("two.DGKz9HWs.mp4");
+var two_default$6 = "" + __buildAssetsURL("two.DGKz9HWs.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_one/one.mp4?url
+var one_default$4 = "" + __buildAssetsURL("one.DUFkjSfn.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_one/three.mp4?url
+var three_default$4 = "" + __buildAssetsURL("three.D8G6rcvz.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_one/two.mp4?url
+var two_default$5 = "" + __buildAssetsURL("two.BxTPzBfB.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_three/one.mp4?url
+var one_default$3 = "" + __buildAssetsURL("one.p-NdnZDd.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_three/three.mp4?url
+var three_default$3 = "" + __buildAssetsURL("three.DTJ6vaxA.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_three/two.mp4?url
+var two_default$4 = "" + __buildAssetsURL("two.BO0G13X2.mp4");
+//#endregion
+//#region assets/episode_contents/episode_three/timestamp_two/two.png?url
+var two_default$3 = "" + __buildAssetsURL("two.C6qJAy9i.png");
 //#endregion
 //#region assets/episode_contents/episode_two/timestamp_one/one.png?url
 var one_default$2 = "" + __buildAssetsURL("one.LQv0J4jm.png");
@@ -1204,7 +1234,7 @@ var two_default = "" + __buildAssetsURL("two.DpQPpJus.jpeg");
 var kp_favicon_default = "" + __buildAssetsURL("kp_favicon.B8zIlRr6.ico");
 //#endregion
 //#region app.vue?vue&type=script&setup=true&lang.ts
-var captionSegmentDuration = 4.5;
+var captionSegmentDuration = 5;
 var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineComponent({
 	__name: "app",
 	__ssrInlineRender: true,
@@ -1247,26 +1277,36 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"./assets/episode_thumbnails/episode_two/graduation.mp4": graduation_default
 		});
 		const episodeContentCaptionModules = /* #__PURE__ */ Object.assign({
-			"./assets/episode_contents/episode_one/timestamp_five/caption.txt": caption_default$7,
-			"./assets/episode_contents/episode_one/timestamp_four/caption.txt": caption_default$6,
-			"./assets/episode_contents/episode_one/timestamp_one/caption.txt": caption_default$5,
-			"./assets/episode_contents/episode_one/timestamp_three/caption.txt": caption_default$4,
-			"./assets/episode_contents/episode_one/timestamp_two/caption.txt": caption_default$3,
+			"./assets/episode_contents/episode_one/timestamp_five/caption.txt": caption_default$10,
+			"./assets/episode_contents/episode_one/timestamp_four/caption.txt": caption_default$9,
+			"./assets/episode_contents/episode_one/timestamp_one/caption.txt": caption_default$8,
+			"./assets/episode_contents/episode_one/timestamp_three/caption.txt": caption_default$7,
+			"./assets/episode_contents/episode_one/timestamp_two/caption.txt": caption_default$6,
+			"./assets/episode_contents/episode_three/timestamp_one/caption.txt": caption_default$5,
+			"./assets/episode_contents/episode_three/timestamp_three/caption.txt": caption_default$4,
+			"./assets/episode_contents/episode_three/timestamp_two/caption.txt": caption_default$3,
 			"./assets/episode_contents/episode_two/timestamp_one/caption.txt": caption_default$2,
 			"./assets/episode_contents/episode_two/timestamp_three/caption.txt": caption_default$1,
 			"./assets/episode_contents/episode_two/timestamp_two/caption.txt": caption_default
 		});
 		const episodeContentMediaModules = /* #__PURE__ */ Object.assign({
-			"./assets/episode_contents/episode_one/timestamp_five/one.mp4": one_default$7,
-			"./assets/episode_contents/episode_one/timestamp_five/two.mp4": two_default$6,
-			"./assets/episode_contents/episode_one/timestamp_four/one.mp4": one_default$6,
-			"./assets/episode_contents/episode_one/timestamp_one/one.mp4": one_default$5,
-			"./assets/episode_contents/episode_one/timestamp_one/two.mp4": two_default$5,
-			"./assets/episode_contents/episode_one/timestamp_three/one.mp4": one_default$4,
-			"./assets/episode_contents/episode_one/timestamp_three/two.mp4": two_default$4,
-			"./assets/episode_contents/episode_one/timestamp_two/one.jpg": one_default$3,
-			"./assets/episode_contents/episode_one/timestamp_two/three.jpg": three_default$3,
-			"./assets/episode_contents/episode_one/timestamp_two/two.mp4": two_default$3,
+			"./assets/episode_contents/episode_one/timestamp_five/one.mp4": one_default$9,
+			"./assets/episode_contents/episode_one/timestamp_five/two.mp4": two_default$9,
+			"./assets/episode_contents/episode_one/timestamp_four/one.mp4": one_default$8,
+			"./assets/episode_contents/episode_one/timestamp_one/one.mp4": one_default$7,
+			"./assets/episode_contents/episode_one/timestamp_one/two.mp4": two_default$8,
+			"./assets/episode_contents/episode_one/timestamp_three/one.mp4": one_default$6,
+			"./assets/episode_contents/episode_one/timestamp_three/two.mp4": two_default$7,
+			"./assets/episode_contents/episode_one/timestamp_two/one.jpg": one_default$5,
+			"./assets/episode_contents/episode_one/timestamp_two/three.jpg": three_default$5,
+			"./assets/episode_contents/episode_one/timestamp_two/two.mp4": two_default$6,
+			"./assets/episode_contents/episode_three/timestamp_one/one.mp4": one_default$4,
+			"./assets/episode_contents/episode_three/timestamp_one/three.mp4": three_default$4,
+			"./assets/episode_contents/episode_three/timestamp_one/two.mp4": two_default$5,
+			"./assets/episode_contents/episode_three/timestamp_three/one.mp4": one_default$3,
+			"./assets/episode_contents/episode_three/timestamp_three/three.mp4": three_default$3,
+			"./assets/episode_contents/episode_three/timestamp_three/two.mp4": two_default$4,
+			"./assets/episode_contents/episode_three/timestamp_two/two.png": two_default$3,
 			"./assets/episode_contents/episode_two/timestamp_one/one.png": one_default$2,
 			"./assets/episode_contents/episode_two/timestamp_one/three.jpeg": three_default$2,
 			"./assets/episode_contents/episode_two/timestamp_one/two.jpeg": two_default$2,
@@ -1287,33 +1327,42 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"five"
 		];
 		const episodeClipSequences = episodeFolderNames.map((folder) => Object.entries(episodeThumbnailModules).filter(([path]) => path.includes(`/episode_${folder}/`)).sort(([firstPath], [secondPath]) => firstPath.localeCompare(secondPath)).map(([, url]) => url));
-		function getCaptionParts(segment) {
-			const parts = [];
-			const italicPattern = /<i>([\s\S]*?)<\/i>/gi;
+		const supportedCaptionTags = /* @__PURE__ */ new Set([
+			"b",
+			"strong",
+			"i",
+			"em",
+			"u",
+			"s",
+			"del",
+			"mark",
+			"small",
+			"sub",
+			"sup",
+			"code",
+			"kbd",
+			"br"
+		]);
+		function escapeCaptionText(text) {
+			return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
+		function sanitizeCaptionHtml(segment) {
+			const tagPattern = /<\/?([a-z][a-z0-9-]*)(?:\s[^<>]*)?\s*\/?\s*>/gi;
+			let sanitized = "";
 			let lastIndex = 0;
 			let match;
-			while (match = italicPattern.exec(segment)) {
-				if (match.index > lastIndex) parts.push({
-					text: segment.slice(lastIndex, match.index),
-					italic: false
-				});
-				parts.push({
-					text: match[1],
-					italic: true
-				});
-				lastIndex = italicPattern.lastIndex;
+			while (match = tagPattern.exec(segment)) {
+				sanitized += escapeCaptionText(segment.slice(lastIndex, match.index));
+				const tagName = match[1].toLowerCase();
+				const isClosingTag = match[0].startsWith("</");
+				if (supportedCaptionTags.has(tagName)) sanitized += tagName === "br" ? "<br>" : isClosingTag ? `</${tagName}>` : `<${tagName}>`;
+				else sanitized += escapeCaptionText(match[0]);
+				lastIndex = tagPattern.lastIndex;
 			}
-			if (lastIndex < segment.length) parts.push({
-				text: segment.slice(lastIndex),
-				italic: false
-			});
-			return parts.length ? parts : [{
-				text: segment,
-				italic: false
-			}];
+			return sanitized + escapeCaptionText(segment.slice(lastIndex));
 		}
 		function splitCaption(caption) {
-			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)).map((segment) => segment.trim()).filter(Boolean).map((segment) => ({ parts: getCaptionParts(segment) }));
+			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)).map((segment) => segment.trim()).filter(Boolean).map((segment) => ({ html: sanitizeCaptionHtml(segment) }));
 		}
 		const sequenceNameOrder = [
 			"one",
@@ -1376,6 +1425,9 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 		const activeTimestampIndex = ref(0);
 		const activeCaptionIndex = ref(0);
 		const activeMediaIndex = ref(0);
+		const activeMediaVideo = ref(null);
+		const playbackFeedback = ref(null);
+		ref(0);
 		const activeHomeImageGroup = ref(0);
 		const isTransitioning = ref(false);
 		const isEpisodeLoading = ref(false);
@@ -1484,7 +1536,13 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 				const nextPosition = playbackPosition.value + captionSegmentDuration;
 				seekPlayback(nextPosition);
 				if (nextPosition >= playbackDuration.value) isPlaybackActive.value = false;
-			}, 4500);
+			}, captionSegmentDuration * 1e3);
+		}
+		function syncActiveMediaPlayback() {
+			const video = activeMediaVideo.value;
+			if (!video) return;
+			if (isPlaybackActive.value) video.play().catch(() => void 0);
+			else video.pause();
 		}
 		watch([
 			isPlayerOpen,
@@ -1507,6 +1565,9 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			activeTimestampIndex,
 			activeMediaIndex
 		], scheduleMediaAdvance);
+		watch([isPlaybackActive, activeMedia], () => {
+			nextTick(syncActiveMediaPlayback);
+		});
 		return (_ctx, _push, _parent, _attrs) => {
 			_push(`<main${ssrRenderAttrs(mergeProps({ class: "site-shell" }, _attrs))}>`);
 			if (unref(introComplete) && unref(cursorIsVisible)) {
@@ -1585,25 +1646,27 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			if (unref(isPlayerOpen)) {
 				_push(`<section class="${ssrRenderClass(["player-page", { "player-page--leaving": unref(transitionPhase) === "leaving" }])}" aria-labelledby="player-title"><nav class="nav"><button class="brand" aria-label="Back to home">KURT<span>PAGUIO</span></button><button class="back-button">← Episodes</button></nav><div class="player-content"><p class="eyebrow">NOW PLAYING</p><div class="video-player" role="region"${ssrRenderAttr("aria-label", `Episode ${unref(playerEpisode).number} video player`)}>`);
 				if (unref(activeEpisodeTimestamps).length && unref(activeTimestamp)) {
-					_push(`<div class="episode-content-stage"><h1 id="player-title" class="sr-only">${ssrInterpolate(unref(playerEpisode).title)}</h1><div class="timestamp-rail" style="${ssrRenderStyle({ "--timestamp-count": unref(activeEpisodeTimestamps).length })}"${ssrRenderAttr("aria-label", `${unref(playerEpisode).title} timestamps`)}><!--[-->`);
+					_push(`<div class="episode-content-stage"><h1 id="player-title" class="sr-only">${ssrInterpolate(unref(playerEpisode).title)}</h1>`);
+					if (unref(playbackFeedback)) {
+						_push(`<div class="${ssrRenderClass(["playback-feedback", {
+							"playback-feedback--left": unref(playbackFeedback) === "previous",
+							"playback-feedback--right": unref(playbackFeedback) === "next"
+						}])}" aria-hidden="true">`);
+						if (unref(playbackFeedback) === "previous" || unref(playbackFeedback) === "next") _push(`<span>5 seconds</span>`);
+						else _push(`<!--[-->${ssrInterpolate(unref(playbackFeedback) === "pause" ? "❚❚" : "▶")}<!--]-->`);
+						_push(`</div>`);
+					} else _push(`<!---->`);
+					_push(`<div class="timestamp-rail" style="${ssrRenderStyle({ "--timestamp-count": unref(activeEpisodeTimestamps).length })}"${ssrRenderAttr("aria-label", `${unref(playerEpisode).title} timestamps`)}><!--[-->`);
 					ssrRenderList(unref(activeEpisodeTimestamps), (timestamp, index) => {
 						_push(`<button class="${ssrRenderClass(["timestamp-button", { "timestamp-button--active": unref(activeTimestampIndex) === index }])}"${ssrRenderAttr("aria-label", `Show timestamp ${index + 1}`)}${ssrRenderAttr("aria-pressed", unref(activeTimestampIndex) === index)}>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</button>`);
 					});
 					_push(`<!--]--></div><div class="episode-content-grid"><div class="episode-caption" aria-live="polite"><span class="episode-caption__count">${ssrInterpolate(String(unref(activeCaptionIndex) + 1).padStart(2, "0"))} / ${ssrInterpolate(String(unref(activeTimestamp).captionSegments.length).padStart(2, "0"))}</span>`);
-					if (unref(activeCaption)) {
-						_push(`<p><!--[-->`);
-						ssrRenderList(unref(activeCaption).parts, (part, index) => {
-							_push(`<!--[-->`);
-							if (part.italic) _push(`<i>${ssrInterpolate(part.text)}</i>`);
-							else _push(`<!--[-->${ssrInterpolate(part.text)}<!--]-->`);
-							_push(`<!--]-->`);
-						});
-						_push(`<!--]--></p>`);
-					} else _push(`<!---->`);
+					if (unref(activeCaption)) _push(`<p>${unref(activeCaption).html ?? ""}</p>`);
+					else _push(`<!---->`);
 					_push(`</div><div class="episode-media">`);
 					if (unref(activeMedia)) {
 						_push(`<div class="episode-media__item">`);
-						if (unref(activeMedia).type === "video") _push(`<video${ssrRenderAttr("src", unref(activeMedia).url)} autoplay muted playsinline preload="metadata"${ssrRenderAttr("aria-label", `${unref(playerEpisode).title} media`)}></video>`);
+						if (unref(activeMedia).type === "video") _push(`<video${ssrRenderAttr("src", unref(activeMedia).url)}${ssrIncludeBooleanAttr(unref(isPlaybackActive)) ? " autoplay" : ""} muted playsinline preload="metadata"${ssrRenderAttr("aria-label", `${unref(playerEpisode).title} media`)}></video>`);
 						else _push(`<img${ssrRenderAttr("src", unref(activeMedia).url)}${ssrRenderAttr("alt", `${unref(playerEpisode).title} media`)}>`);
 						_push(`</div>`);
 					} else _push(`<!---->`);
