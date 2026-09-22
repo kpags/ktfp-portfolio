@@ -57,7 +57,7 @@ const episodeClipSequences = episodeFolderNames.map(folder =>
     .map(([, url]) => url),
 )
 
-type CaptionSegment = { html: string; isOverflowSplit?: boolean }
+type CaptionSegment = { html: string; isOverflowSplit?: boolean; isContinuation?: boolean }
 type EpisodeTimestamp = {
   folder: string
   captionSegments: CaptionSegment[]
@@ -65,7 +65,7 @@ type EpisodeTimestamp = {
 }
 
 const supportedCaptionTags = new Set([
-  'b', 'strong', 'i', 'em', 'u', 's', 'del', 'mark', 'small', 'sub', 'sup', 'code', 'kbd', 'br',
+  'b', 'strong', 'i', 'em', 'u', 's', 'del', 'mark', 'small', 'sub', 'sup', 'code', 'kbd', 'br', 'ul', 'ol', 'li',
 ])
 
 function escapeCaptionText(text: string) {
@@ -98,14 +98,28 @@ function sanitizeCaptionHtml(segment: string) {
   return sanitized + escapeCaptionText(segment.slice(lastIndex))
 }
 
+function hasContinuationMarker(html: string) {
+  return html.replace(/<[^>]*>/g, '').trimStart().startsWith('—')
+}
+
 function splitCaption(caption: string) {
   return caption
     .trim()
     .split(/\r?\n+/)
-    .flatMap(line => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/))
-    .map(segment => segment.trim())
-    .filter(Boolean)
-    .map(segment => ({ html: sanitizeCaptionHtml(segment) }))
+    .flatMap(line => line
+      .trim()
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)
+      .map(segment => segment.trim())
+      .filter(Boolean)
+      .map((segment, index) => {
+        const html = sanitizeCaptionHtml(segment)
+        const isContinuation = index > 0
+        return {
+          html: isContinuation && !hasContinuationMarker(html) ? `— ${html}` : html,
+          isContinuation,
+        }
+      }),
+    )
 }
 
 function splitCaptionForFit(html: string) {
@@ -120,8 +134,12 @@ function splitCaptionForFit(html: string) {
 
   const finishSegment = () => {
     const closedTags = [...activeTags].reverse().map(tag => `</${tag}>`).join('')
-    if (current.trim()) segments.push({ html: `${current}${closedTags}`, isOverflowSplit: true })
-    current = activeTags.map(tag => `<${tag}>`).join('')
+    const isContinuation = segments.length > 0
+    if (current.trim()) {
+      segments.push({ html: `${current}${closedTags}`, isOverflowSplit: true, isContinuation })
+    }
+    const reopenedTags = activeTags.map(tag => `<${tag}>`).join('')
+    current = `${reopenedTags}${segments.length ? '— ' : ''}`
     visibleCharacters = 0
   }
 
@@ -573,7 +591,10 @@ async function fitCaption(request: number) {
   if (fitKey === captionFitKey) return
 
   isCaptionFitInProgress = true
-  const minimumSize = window.matchMedia('(max-width: 560px)').matches ? 16 : 18.4
+  const isListCaption = /<(?:ul|ol|li)>/i.test(activeCaption.value.html)
+  const minimumSize = isListCaption
+    ? window.matchMedia('(max-width: 560px)').matches ? 11.2 : 12
+    : window.matchMedia('(max-width: 560px)').matches ? 16 : 18.4
   const result = measureCaptionFontSize(caption, availableHeight, minimumSize)
   if (!result) {
     isCaptionFitInProgress = false
@@ -877,7 +898,7 @@ onBeforeUnmount(() => {
             <div class="episode-content-grid">
               <div class="episode-caption" aria-live="polite">
                 <span class="episode-caption__count">{{ String(activeCaptionIndex + 1).padStart(2, '0') }} / {{ String(activeTimestamp.captionSegments.length).padStart(2, '0') }}</span>
-                <p v-if="activeCaption" :ref="setCaptionElement" :style="captionFontSize ? { fontSize: captionFontSize } : undefined" v-html="activeCaption.html"></p>
+                <div v-if="activeCaption" :ref="setCaptionElement" class="episode-caption__body" :style="captionFontSize ? { fontSize: captionFontSize } : undefined" v-html="activeCaption.html"></div>
               </div>
               <div class="episode-media">
                 <Transition name="episode-media" mode="out-in">

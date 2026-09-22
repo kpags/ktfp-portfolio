@@ -1113,6 +1113,12 @@ var defense_default = "" + __buildAssetsURL("defense.5YxW4nUE.mp4");
 //#region assets/episode_thumbnails/episode_two/graduation.mp4?url
 var graduation_default = "" + __buildAssetsURL("graduation.BtfL6Z3m.mp4");
 //#endregion
+//#region assets/episode_contents/episode_four/timestamp_one/caption.txt?raw
+var caption_default$12 = "Job #1: Software developer (Aug 2023 - February 2024)\r\n\r\nFor my first job, fresh from graduation, I was able to pass and joined <b>Edusuite</b>.\r\n\r\nThey are a School Management System with great benefits like Work from home, flexible work hours, unlimited PTO, etc.\r\n\r\nEdusuite streamlines different school needs such as enrollment, grading, admissions, and finance.\r\n\r\nDuring my time here I was assigned to one of their clients, CIIT. I used Java & Springboot, HTML, CSS, JavaScript, PostgreSQL, and Airtable.\r\n\r\nCareer Highlights: <ul><li>Integrated Airtable with CIIT's SMS for synchronized student and payment records.</li><li>Developed Payments Monitoring Page</li><li>Developed and maintained features from CIIT requests.</li></ul>";
+//#endregion
+//#region assets/episode_contents/episode_four/timestamp_two/caption.txt?raw
+var caption_default$11 = "Job #2: Backend Engineering Specialist (February 2024 - January 2025)\r\n\r\nMy second job was where I learned so many things about being a programmer.\r\n\r\nI've switched from Java/Springboot to Python/Django. I've also learned the use of Docker, which was a great addition to my stack.\r\n\r\nIn here, I focused mostly on server side but I've also contributed to client side using VueJS.\r\n\r\nJust some simple admin features and minor UI bugs or enhancements.\r\n\r\nCareer Highlights: <ul><li>Led the server side development of the Dropify PH Website. Utilized the WordPress Docker Image as a headless CMS to store WooCommerce data such as Customers, Products, Orders, & Subscriptions. Also integrated QuickBooks and Xendit for payment and invoice processes.</li></ul>\r\n\r\n<ul><li>Developed server side of Sellers Hub Learning Center that allows the clients to learn about dropshipping via videos, modules, and assessments.</li></ul>\r\n\r\n<ul><li>Assisted in maintaining and development of APIs for Sellers Hub Analytics that displays the respective store statistics, performance, and business trends to each dropshipper.</li></ul>\r\n\r\n<ul><li>Developed SKU Monitoring Feature and integrated Google Calendar with the booking system in the Dropify ERP.</li></ul>";
+//#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/caption.txt?raw
 var caption_default$10 = "Lastly, before ending this 'About Me', I also love to watch series, especially anime.\r\n\r\n<i>Kaizoku-O ni ore wa naru!</i>, a quote from one piece because I love that anime. I recommend watching it 😎\r\n\r\nThat's it about me. Onto the next episode!";
 //#endregion
@@ -1145,6 +1151,12 @@ var caption_default$1 = "Last and the finish line of my education, my college da
 //#endregion
 //#region assets/episode_contents/episode_two/timestamp_two/caption.txt?raw
 var caption_default = "Next one is my Senior High School days. Same school but just different building...and level of course.\r\n\r\nThis was where I've encountered my first programing language in one of my subjects.\r\n\r\nThe C++. \r\n\r\nAnd gosh, I really sucked on that one.\r\n\r\nI've also encountered difficulties like calculus, physics, and other science stuffs but I still made it out alive 😮‍💨";
+//#endregion
+//#region assets/episode_contents/episode_four/timestamp_one/one.mp4?url
+var one_default$11 = "" + __buildAssetsURL("one.WJjjv-HP.mp4");
+//#endregion
+//#region assets/episode_contents/episode_four/timestamp_two/one.mp4?url
+var one_default$10 = "" + __buildAssetsURL("one.QOk2gO7B.mp4");
 //#endregion
 //#region assets/episode_contents/episode_one/timestamp_five/one.mp4?url
 var one_default$9 = "" + __buildAssetsURL("one.CRuQVMtV.mp4");
@@ -1277,6 +1289,8 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"./assets/episode_thumbnails/episode_two/graduation.mp4": graduation_default
 		});
 		const episodeContentCaptionModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_contents/episode_four/timestamp_one/caption.txt": caption_default$12,
+			"./assets/episode_contents/episode_four/timestamp_two/caption.txt": caption_default$11,
 			"./assets/episode_contents/episode_one/timestamp_five/caption.txt": caption_default$10,
 			"./assets/episode_contents/episode_one/timestamp_four/caption.txt": caption_default$9,
 			"./assets/episode_contents/episode_one/timestamp_one/caption.txt": caption_default$8,
@@ -1290,6 +1304,8 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"./assets/episode_contents/episode_two/timestamp_two/caption.txt": caption_default
 		});
 		const episodeContentMediaModules = /* #__PURE__ */ Object.assign({
+			"./assets/episode_contents/episode_four/timestamp_one/one.mp4": one_default$11,
+			"./assets/episode_contents/episode_four/timestamp_two/one.mp4": one_default$10,
 			"./assets/episode_contents/episode_one/timestamp_five/one.mp4": one_default$9,
 			"./assets/episode_contents/episode_one/timestamp_five/two.mp4": two_default$9,
 			"./assets/episode_contents/episode_one/timestamp_four/one.mp4": one_default$8,
@@ -1341,7 +1357,10 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			"sup",
 			"code",
 			"kbd",
-			"br"
+			"br",
+			"ul",
+			"ol",
+			"li"
 		]);
 		function escapeCaptionText(text) {
 			return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -1361,8 +1380,18 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			}
 			return sanitized + escapeCaptionText(segment.slice(lastIndex));
 		}
+		function hasContinuationMarker(html) {
+			return html.replace(/<[^>]*>/g, "").trimStart().startsWith("—");
+		}
 		function splitCaption(caption) {
-			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/)).map((segment) => segment.trim()).filter(Boolean).map((segment) => ({ html: sanitizeCaptionHtml(segment) }));
+			return caption.trim().split(/\r?\n+/).flatMap((line) => line.trim().split(/(?<=[.!?])\s+(?=[A-Z0-9“'<])/).map((segment) => segment.trim()).filter(Boolean).map((segment, index) => {
+				const html = sanitizeCaptionHtml(segment);
+				const isContinuation = index > 0;
+				return {
+					html: isContinuation && !hasContinuationMarker(html) ? `— ${html}` : html,
+					isContinuation
+				};
+			}));
 		}
 		function splitCaptionForFit(html) {
 			const maximumCharacters = 120;
@@ -1375,11 +1404,13 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			let match;
 			const finishSegment = () => {
 				const closedTags = [...activeTags].reverse().map((tag) => `</${tag}>`).join("");
+				const isContinuation = segments.length > 0;
 				if (current.trim()) segments.push({
 					html: `${current}${closedTags}`,
-					isOverflowSplit: true
+					isOverflowSplit: true,
+					isContinuation
 				});
-				current = activeTags.map((tag) => `<${tag}>`).join("");
+				current = `${activeTags.map((tag) => `<${tag}>`).join("")}${segments.length ? "— " : ""}`;
 				visibleCharacters = 0;
 			};
 			const appendText = (text) => {
@@ -1649,7 +1680,7 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 			const fitKey = getCaptionFitKey(caption, availableHeight);
 			if (fitKey === captionFitKey) return;
 			isCaptionFitInProgress = true;
-			const minimumSize = (void 0).matchMedia("(max-width: 560px)").matches ? 16 : 18.4;
+			const minimumSize = /<(?:ul|ol|li)>/i.test(activeCaption.value.html) ? (void 0).matchMedia("(max-width: 560px)").matches ? 11.2 : 12 : (void 0).matchMedia("(max-width: 560px)").matches ? 16 : 18.4;
 			const result = measureCaptionFontSize(caption, availableHeight, minimumSize);
 			if (!result) {
 				isCaptionFitInProgress = false;
@@ -1802,7 +1833,7 @@ var app_vue_vue_type_script_setup_true_lang_default = /*@__PURE__*/ defineCompon
 						_push(`<button class="${ssrRenderClass(["timestamp-button", { "timestamp-button--active": unref(activeTimestampIndex) === index }])}"${ssrRenderAttr("aria-label", `Show timestamp ${index + 1}`)}${ssrRenderAttr("aria-pressed", unref(activeTimestampIndex) === index)}>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</button>`);
 					});
 					_push(`<!--]--></div><div class="episode-content-grid"><div class="episode-caption" aria-live="polite"><span class="episode-caption__count">${ssrInterpolate(String(unref(activeCaptionIndex) + 1).padStart(2, "0"))} / ${ssrInterpolate(String(unref(activeTimestamp).captionSegments.length).padStart(2, "0"))}</span>`);
-					if (unref(activeCaption)) _push(`<p style="${ssrRenderStyle(unref(captionFontSize) ? { fontSize: unref(captionFontSize) } : void 0)}">${unref(activeCaption).html ?? ""}</p>`);
+					if (unref(activeCaption)) _push(`<div class="episode-caption__body" style="${ssrRenderStyle(unref(captionFontSize) ? { fontSize: unref(captionFontSize) } : void 0)}">${unref(activeCaption).html ?? ""}</div>`);
 					else _push(`<!---->`);
 					_push(`</div><div class="episode-media">`);
 					if (unref(activeMedia)) {

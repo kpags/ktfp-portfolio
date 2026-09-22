@@ -1,0 +1,17 @@
+Job #2: Backend Engineering Specialist (February 2024 - January 2025)
+
+My second job was where I learned so many things about being a programmer.
+
+I've switched from Java/Springboot to Python/Django. I've also learned the use of Docker, which was a great addition to my stack.
+
+In here, I focused mostly on server side but I've also contributed to client side using VueJS.
+
+Just some simple admin features and minor UI bugs or enhancements.
+
+Career Highlights: <ul><li>Led the server side development of the Dropify PH Website. Utilized the WordPress Docker Image as a headless CMS to store WooCommerce data such as Customers, Products, Orders, & Subscriptions. Also integrated QuickBooks and Xendit for payment and invoice processes.</li></ul>
+
+<ul><li>Developed server side of Sellers Hub Learning Center that allows the clients to learn about dropshipping via videos, modules, and assessments.</li></ul>
+
+<ul><li>Assisted in maintaining and development of APIs for Sellers Hub Analytics that displays the respective store statistics, performance, and business trends to each dropshipper.</li></ul>
+
+<ul><li>Developed SKU Monitoring Feature and integrated Google Calendar with the booking system in the Dropify ERP.</li></ul>

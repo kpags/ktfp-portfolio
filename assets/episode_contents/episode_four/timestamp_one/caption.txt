@@ -1,0 +1,11 @@
+Job #1: Software developer (Aug 2023 - February 2024)
+
+For my first job, fresh from graduation, I was able to pass and joined <b>Edusuite</b>.
+
+They are a School Management System with great benefits like Work from home, flexible work hours, unlimited PTO, etc.
+
+Edusuite streamlines different school needs such as enrollment, grading, admissions, and finance.
+
+During my time here I was assigned to one of their clients, CIIT. I used Java & Springboot, HTML, CSS, JavaScript, PostgreSQL, and Airtable.
+
+Career Highlights: <ul><li>Integrated Airtable with CIIT's SMS for synchronized student and payment records.</li><li>Developed Payments Monitoring Page</li><li>Developed and maintained features from CIIT requests.</li></ul>
